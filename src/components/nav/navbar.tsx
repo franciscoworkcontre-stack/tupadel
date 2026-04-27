@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const links = [
   { href: "/palas", label: "Palas" },
@@ -16,14 +17,14 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`px-6 md:px-8 py-4 md:py-5 flex items-center justify-between relative z-20 ${
+    <nav className={`px-6 md:px-8 py-3 md:py-4 flex items-center justify-between relative z-20 ${
       dark
         ? "absolute top-0 left-0 right-0 bg-transparent border-b border-white/10"
         : "border-b border-line bg-canvas"
     }`}>
       <div className="flex items-center gap-8 md:gap-10">
-        <Link href="/" className={`display text-lg md:text-xl font-semibold tracking-tight ${dark ? "text-white" : "text-ink"}`}>
-          tupadel
+        <Link href="/">
+          <Logo dark={dark} />
         </Link>
         <div className="hidden md:flex items-center gap-7">
           {links.map((l) => (
@@ -33,7 +34,7 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
               className={`text-sm font-medium transition-colors ${
                 dark
                   ? activeSection === l.href ? "text-[#A8E63A]" : "text-white/70 hover:text-white"
-                  : activeSection === l.href ? "text-padel" : "text-ink hover:text-padel"
+                  : activeSection === l.href ? "text-padel" : "text-ink-muted hover:text-ink"
               }`}
             >
               {l.label}
@@ -50,10 +51,10 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
         </Link>
         <Link
           href="/diagnostico"
-          className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
+          className={`text-sm font-semibold px-4 py-2 rounded-lg transition-colors ${
             dark
-              ? "bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20"
-              : "bg-ink text-white hover:bg-ink-muted"
+              ? "bg-[#A8E63A] text-[#0D1B2A] hover:bg-[#7DB81E]"
+              : "bg-[#0D1B2A] text-white hover:bg-[#1a2f47]"
           }`}
         >
           Hacer diagnóstico →
@@ -61,12 +62,12 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
       </div>
       <button className="md:hidden" onClick={() => setOpen(!open)}>
         {open
-          ? <X className={`w-5 h-5 ${dark ? "text-white" : ""}`} />
-          : <Menu className={`w-5 h-5 ${dark ? "text-white" : ""}`} />
+          ? <X className={`w-5 h-5 ${dark ? "text-white" : "text-ink"}`} />
+          : <Menu className={`w-5 h-5 ${dark ? "text-white" : "text-ink"}`} />
         }
       </button>
       {open && (
-        <div className="absolute top-full left-0 right-0 bg-[#0A0A0A] border-b border-white/10 z-50 px-6 py-4 space-y-3">
+        <div className="absolute top-full left-0 right-0 bg-[#0D1B2A] border-b border-white/10 z-50 px-6 py-5 space-y-3">
           {links.map((l) => (
             <Link
               key={l.href}
@@ -79,7 +80,7 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
           ))}
           <Link
             href="/diagnostico"
-            className="block bg-[#A8E63A] text-[#0D1B2A] text-sm font-semibold px-4 py-3 rounded-lg text-center mt-2"
+            className="block bg-[#A8E63A] text-[#0D1B2A] text-sm font-bold px-4 py-3 rounded-lg text-center mt-3"
             onClick={() => setOpen(false)}
           >
             Hacer diagnóstico → 3 min

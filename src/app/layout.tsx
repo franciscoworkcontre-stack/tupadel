@@ -16,11 +16,11 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: {
-    default: "tupadel — El copiloto del jugador amateur",
-    template: "%s | tupadel",
+    default: "Pulso Pádel — La guía para jugar mejor",
+    template: "%s | Pulso Pádel",
   },
   description:
-    "Reviews de palas con precios reales, diagnóstico de nivel, directorio de canchas y comunidad para jugadores de pádel en LATAM.",
+    "La guía para jugar mejor. Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad para jugadores de pádel en Chile y LATAM.",
   metadataBase: new URL("https://tupadel.com"),
   openGraph: {
     type: "website",
