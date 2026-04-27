@@ -5,6 +5,11 @@ import { useEffect, useRef, useState } from "react";
 export function VideoIntro() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<"intro" | "fading" | "done">("intro");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -56,7 +61,7 @@ export function VideoIntro() {
         playsInline
         preload="auto"
       >
-        <source src="/hero-intro.mp4" type="video/mp4" />
+        <source src={isMobile ? "/hero-intro-mobile.mp4" : "/hero-intro.mp4"} type="video/mp4" />
       </video>
 
       {/* Skip button */}
