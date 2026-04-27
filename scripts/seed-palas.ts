@@ -18,24 +18,14 @@ const db = drizzle(sql, { schema });
 // ============================================================
 
 const tiendasData = [
-  // Chile
-  { slug: "padelnuestro-cl", nombre: "Padelnuestro CL", dominio: "padelnuestro.cl", pais: "CL", confiabilidad: 5, tiempoEnvioDias: 3, comisionAfiliadoPct: 5 },
-  { slug: "decathlon-cl", nombre: "Decathlon CL", dominio: "decathlon.cl", pais: "CL", confiabilidad: 5, tiempoEnvioDias: 2, comisionAfiliadoPct: 0 },
-  { slug: "mercadolibre-cl", nombre: "MercadoLibre CL", dominio: "mercadolibre.cl", pais: "CL", confiabilidad: 3, tiempoEnvioDias: 5, comisionAfiliadoPct: 0 },
-  { slug: "padelpoint-cl", nombre: "PadelPoint CL", dominio: "padelpoint.cl", pais: "CL", confiabilidad: 4, tiempoEnvioDias: 4, comisionAfiliadoPct: 4 },
-  { slug: "yapo-cl", nombre: "Yapo CL", dominio: "yapo.cl", pais: "CL", confiabilidad: 2, tiempoEnvioDias: null, comisionAfiliadoPct: 0 },
-  // España
-  { slug: "padelnuestro-es", nombre: "Padelnuestro ES", dominio: "padelnuestro.com", pais: "ES", confiabilidad: 5, tiempoEnvioDias: 2, comisionAfiliadoPct: 6 },
-  { slug: "padelreference", nombre: "Padel Reference", dominio: "padelreference.com", pais: "FR", confiabilidad: 5, tiempoEnvioDias: 3, comisionAfiliadoPct: 5 },
-  { slug: "solspadel", nombre: "Sols Pádel", dominio: "solspadel.com", pais: "ES", confiabilidad: 4, tiempoEnvioDias: 3, comisionAfiliadoPct: 4 },
-  // Argentina
-  { slug: "mercadolibre-ar", nombre: "MercadoLibre AR", dominio: "mercadolibre.com.ar", pais: "AR", confiabilidad: 3, tiempoEnvioDias: 7, comisionAfiliadoPct: 0 },
-  { slug: "padelmarket-ar", nombre: "PadelMarket AR", dominio: "padelmarket.com.ar", pais: "AR", confiabilidad: 4, tiempoEnvioDias: 5, comisionAfiliadoPct: 3 },
-  // México
-  { slug: "padelmania-mx", nombre: "PadelMania MX", dominio: "padelmania.mx", pais: "MX", confiabilidad: 4, tiempoEnvioDias: 5, comisionAfiliadoPct: 3 },
-  // USA
-  { slug: "padelusa", nombre: "Padel USA", dominio: "padelusa.com", pais: "US", confiabilidad: 4, tiempoEnvioDias: 4, comisionAfiliadoPct: 5 },
-  { slug: "amazon-us", nombre: "Amazon US", dominio: "amazon.com", pais: "US", confiabilidad: 4, tiempoEnvioDias: 3, comisionAfiliadoPct: 3 },
+  // Chile — tiendas reales verificadas
+  { slug: "mercadopadel-cl",  nombre: "Mercado Pádel",    dominio: "mercadopadel.cl",    pais: "CL", confiabilidad: 5, tiempoEnvioDias: 3, comisionAfiliadoPct: 0 },
+  { slug: "apasur",           nombre: "Apasur",           dominio: "tiendaapasur.cl",    pais: "CL", confiabilidad: 4, tiempoEnvioDias: 3, comisionAfiliadoPct: 0 },
+  { slug: "sursports-cl",     nombre: "Sur Sports",       dominio: "sursports.cl",       pais: "CL", confiabilidad: 4, tiempoEnvioDias: 4, comisionAfiliadoPct: 0 },
+  { slug: "padelaltamira-cl", nombre: "Pádel Altamira",   dominio: "padelaltamira.cl",   pais: "CL", confiabilidad: 4, tiempoEnvioDias: 3, comisionAfiliadoPct: 0 },
+  { slug: "padelshopchile",   nombre: "Padel Shop Chile", dominio: "padelshopchile.cl",  pais: "CL", confiabilidad: 4, tiempoEnvioDias: 4, comisionAfiliadoPct: 0 },
+  { slug: "bullpadel-cl",     nombre: "Bullpadel Chile",  dominio: "bullpadel.cl",       pais: "CL", confiabilidad: 5, tiempoEnvioDias: 2, comisionAfiliadoPct: 0 },
+  { slug: "keepon-cl",        nombre: "Keep On Padel",    dominio: "keepon.cl",          pais: "CL", confiabilidad: 4, tiempoEnvioDias: 3, comisionAfiliadoPct: 0 },
 ];
 
 // ============================================================
@@ -899,65 +889,244 @@ const palasData = [
 // PRECIOS POR TIENDA (CLP)
 // ============================================================
 
+// Precios reales scrapeados en abril 2026 de tiendas chilenas verificadas
 const preciosPorPala: Record<string, { tiendaSlug: string; precio: number; url: string }[]> = {
-  "bullpadel-vertex-05-2026":   [{ tiendaSlug: "padelnuestro-cl", precio: 319990, url: "https://padelnuestro.cl/bullpadel-vertex-05-2026" }, { tiendaSlug: "padelnuestro-es", precio: 279990, url: "https://padelnuestro.com/bullpadel-vertex-05-2026" }],
-  "bullpadel-vertex-04-2025":   [{ tiendaSlug: "padelnuestro-cl", precio: 219990, url: "https://padelnuestro.cl/bullpadel-vertex-04" }, { tiendaSlug: "padelpoint-cl", precio: 229990, url: "https://padelpoint.cl/bullpadel-vertex-04" }, { tiendaSlug: "padelreference", precio: 184990, url: "https://padelreference.com/bullpadel-vertex-04" }],
-  "bullpadel-vertex-03-2024":   [{ tiendaSlug: "padelnuestro-cl", precio: 169990, url: "https://padelnuestro.cl/bullpadel-vertex-03" }, { tiendaSlug: "mercadolibre-cl", precio: 159990, url: "https://mercadolibre.cl/bullpadel-vertex-03" }],
-  "bullpadel-hack-04-2025":     [{ tiendaSlug: "padelnuestro-cl", precio: 149990, url: "https://padelnuestro.cl/bullpadel-hack-04" }, { tiendaSlug: "decathlon-cl", precio: 139990, url: "https://decathlon.cl/bullpadel-hack-04" }, { tiendaSlug: "padelnuestro-es", precio: 124990, url: "https://padelnuestro.com/bullpadel-hack-04" }],
-  "bullpadel-neuron-01-2024":   [{ tiendaSlug: "padelnuestro-cl", precio: 249990, url: "https://padelnuestro.cl/bullpadel-neuron-01" }, { tiendaSlug: "padelreference", precio: 214990, url: "https://padelreference.com/bullpadel-neuron-01" }],
-  "bullpadel-neuron-02-2026":   [{ tiendaSlug: "padelnuestro-cl", precio: 299990, url: "https://padelnuestro.cl/bullpadel-neuron-02-2026" }, { tiendaSlug: "padelnuestro-es", precio: 259990, url: "https://padelnuestro.com/bullpadel-neuron-02" }],
-  "bullpadel-pala-03-ctr-2024": [{ tiendaSlug: "padelnuestro-cl", precio: 119990, url: "https://padelnuestro.cl/bullpadel-pala-03" }, { tiendaSlug: "decathlon-cl", precio: 109990, url: "https://decathlon.cl/bullpadel-pala-03" }],
-  "bullpadel-vertex-03-light-2024": [{ tiendaSlug: "padelnuestro-cl", precio: 139990, url: "https://padelnuestro.cl/bullpadel-vertex-03-light" }, { tiendaSlug: "padelreference", precio: 119990, url: "https://padelreference.com/bullpadel-vertex-03-light" }],
-  "bullpadel-vertex-02-2023":   [{ tiendaSlug: "mercadolibre-cl", precio: 99990, url: "https://mercadolibre.cl/bullpadel-vertex-02" }, { tiendaSlug: "yapo-cl", precio: 89990, url: "https://yapo.cl/bullpadel-vertex-02" }],
 
-  "nox-at10-genius-2025":       [{ tiendaSlug: "padelnuestro-cl", precio: 254990, url: "https://padelnuestro.cl/nox-at10-genius" }, { tiendaSlug: "padelpoint-cl", precio: 264990, url: "https://padelpoint.cl/nox-at10-genius" }, { tiendaSlug: "padelnuestro-es", precio: 219990, url: "https://padelnuestro.com/nox-at10-genius" }],
-  "nox-at10-genius-attack-2024":[{ tiendaSlug: "padelnuestro-cl", precio: 274990, url: "https://padelnuestro.cl/nox-at10-attack" }, { tiendaSlug: "padelreference", precio: 239990, url: "https://padelreference.com/nox-at10-attack" }],
-  "nox-ml10-pro-cup-2025":      [{ tiendaSlug: "padelnuestro-cl", precio: 199990, url: "https://padelnuestro.cl/nox-ml10-pro-cup" }, { tiendaSlug: "decathlon-cl", precio: 189990, url: "https://decathlon.cl/nox-ml10" }],
-  "nox-x-one-evo-2024":         [{ tiendaSlug: "decathlon-cl", precio: 79990, url: "https://decathlon.cl/nox-x-one-evo" }, { tiendaSlug: "mercadolibre-cl", precio: 74990, url: "https://mercadolibre.cl/nox-x-one" }],
-  "nox-drone-2023":             [{ tiendaSlug: "padelnuestro-cl", precio: 129990, url: "https://padelnuestro.cl/nox-drone" }, { tiendaSlug: "mercadolibre-cl", precio: 119990, url: "https://mercadolibre.cl/nox-drone" }],
-  "nox-equation-2022":          [{ tiendaSlug: "mercadolibre-cl", precio: 59990, url: "https://mercadolibre.cl/nox-equation" }, { tiendaSlug: "yapo-cl", precio: 49990, url: "https://yapo.cl/nox-equation" }],
+  // ─── BULLPADEL ───────────────────────────────────────────────────────────────
+  "bullpadel-vertex-05-2026":   [
+    { tiendaSlug: "bullpadel-cl",     precio: 349990, url: "https://bullpadel.cl/collections/palas" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 339990, url: "https://mercadopadel.cl/products/pala-bullpadel-vertex-05-2026-protector-grip" },
+    { tiendaSlug: "padelshopchile",   precio: 359990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+    { tiendaSlug: "padelaltamira-cl", precio: 349990, url: "https://www.padelaltamira.cl/collection/palas" },
+  ],
+  "bullpadel-vertex-04-2025":   [
+    { tiendaSlug: "bullpadel-cl",     precio: 239990, url: "https://bullpadel.cl/collections/palas-2025" },
+    { tiendaSlug: "keepon-cl",        precio: 239990, url: "https://keepon.cl/collections/palas/products/pala-padel-bullpadel-vertex-04-comfort-2025" },
+    { tiendaSlug: "padelshopchile",   precio: 249990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+  ],
+  "bullpadel-vertex-03-2024":   [
+    { tiendaSlug: "mercadopadel-cl",  precio: 179990, url: "https://mercadopadel.cl/products/pala-bullpadel-vertex-03-2024" },
+    { tiendaSlug: "padelshopchile",   precio: 189990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+  ],
+  "bullpadel-hack-04-2025":     [
+    { tiendaSlug: "bullpadel-cl",     precio: 179990, url: "https://bullpadel.cl/collections/palas-2025" },
+    { tiendaSlug: "keepon-cl",        precio: 189990, url: "https://keepon.cl/collections/palas/products/pala-padel-bullpadel-hack-04-2025" },
+    { tiendaSlug: "apasur",           precio: 450000, url: "https://tiendaapasur.cl/producto/pala-bullpadel-hack-04-premier-2025/" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 169990, url: "https://mercadopadel.cl/products/bullpadel-hack-04-2025-paquito-navarro-protector-grip" },
+  ],
+  "bullpadel-neuron-01-2024":   [
+    { tiendaSlug: "keepon-cl",        precio: 239990, url: "https://keepon.cl/collections/palas/products/pala-padel-bullpadel-neuron-2025" },
+    { tiendaSlug: "padelshopchile",   precio: 249990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+  ],
+  "bullpadel-neuron-02-2026":   [
+    { tiendaSlug: "bullpadel-cl",     precio: 369990, url: "https://bullpadel.cl/collections/preventas-palas-26" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 347990, url: "https://mercadopadel.cl/products/pala-bullpadel-neuron-02-fede-chingotto-protector-grip" },
+    { tiendaSlug: "padelshopchile",   precio: 379990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+  ],
+  "bullpadel-pala-03-ctr-2024": [
+    { tiendaSlug: "padelshopchile",   precio: 129990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 119990, url: "https://mercadopadel.cl/products/pala-bullpadel" },
+  ],
+  "bullpadel-vertex-03-light-2024": [
+    { tiendaSlug: "padelshopchile",   precio: 159990, url: "https://www.padelshopchile.cl/palas-de-padel/bullpadel" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 149990, url: "https://mercadopadel.cl/products/pala-bullpadel-vertex-03-light" },
+  ],
+  "bullpadel-vertex-02-2023":   [
+    { tiendaSlug: "mercadopadel-cl",  precio: 109990, url: "https://mercadopadel.cl/products/pala-bullpadel-vertex-02-2023" },
+  ],
 
-  "adidas-metalbone-hrd-2026":  [{ tiendaSlug: "padelnuestro-cl", precio: 329990, url: "https://padelnuestro.cl/adidas-metalbone-hrd-2026" }, { tiendaSlug: "padelnuestro-es", precio: 284990, url: "https://padelnuestro.com/adidas-metalbone-hrd-2026" }],
-  "adidas-metalbone-hrd-2025":  [{ tiendaSlug: "padelnuestro-cl", precio: 184990, url: "https://padelnuestro.cl/adidas-metalbone-hrd" }, { tiendaSlug: "padelpoint-cl", precio: 194990, url: "https://padelpoint.cl/adidas-metalbone-hrd" }, { tiendaSlug: "decathlon-cl", precio: 179990, url: "https://decathlon.cl/adidas-metalbone" }],
-  "adidas-metalbone-33-2024":   [{ tiendaSlug: "padelnuestro-cl", precio: 239990, url: "https://padelnuestro.cl/adidas-metalbone-33" }, { tiendaSlug: "padelreference", precio: 209990, url: "https://padelreference.com/adidas-metalbone-33" }],
-  "adidas-adipower-ctrl-33-2024":[{ tiendaSlug: "padelnuestro-cl", precio: 159990, url: "https://padelnuestro.cl/adidas-adipower-ctrl-33" }, { tiendaSlug: "decathlon-cl", precio: 149990, url: "https://decathlon.cl/adidas-adipower-ctrl" }],
-  "adidas-metalbone-32-2023":   [{ tiendaSlug: "mercadolibre-cl", precio: 109990, url: "https://mercadolibre.cl/adidas-metalbone-32" }, { tiendaSlug: "yapo-cl", precio: 99990, url: "https://yapo.cl/adidas-metalbone-32" }],
+  // ─── NOX ────────────────────────────────────────────────────────────────────
+  "nox-at10-genius-2025":       [
+    { tiendaSlug: "keepon-cl",        precio: 239990, url: "https://keepon.cl/collections/palas/products/pala-padel-nox-at10-genius-18k-agustin-tapia" },
+    { tiendaSlug: "sursports-cl",     precio: 269993, url: "https://sursports.cl/collections/palas-de-padel/products/pala-de-padel-at10-genius-18k-by-agustin-tapia-2025" },
+    { tiendaSlug: "padelshopchile",   precio: 299990, url: "https://www.padelshopchile.cl/palas-de-padel/nox" },
+    { tiendaSlug: "padelaltamira-cl", precio: 279990, url: "https://www.padelaltamira.cl/collection/palas" },
+  ],
+  "nox-at10-genius-attack-2024":[
+    { tiendaSlug: "keepon-cl",        precio: 234990, url: "https://keepon.cl/collections/palas/products/pala-padel-nox-at10-genius-attack-12k-by-agustin-tapia" },
+    { tiendaSlug: "sursports-cl",     precio: 344993, url: "https://sursports.cl/collections/palas-de-padel/products/pack-pala-padel-nox-at10-genius-edicion-limitada" },
+  ],
+  "nox-ml10-pro-cup-2025":      [
+    { tiendaSlug: "keepon-cl",        precio: 229990, url: "https://keepon.cl/collections/palas/products/pala-padel-nox-at10-pro-cup-comfort-by-agustin-tapia" },
+    { tiendaSlug: "sursports-cl",     precio: 254993, url: "https://sursports.cl/collections/palas-de-padel/products/pala-de-padel-ml10-quantum-3k-by-miguel-lamperti-2025" },
+    { tiendaSlug: "apasur",           precio: 400000, url: "https://tiendaapasur.cl/categoria-producto/palas/" },
+  ],
+  "nox-x-one-evo-2024":         [
+    { tiendaSlug: "sursports-cl",     precio: 125993, url: "https://sursports.cl/collections/palas-de-padel/products/pala-padel-nox-equation-advanced-series-2024" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 119990, url: "https://mercadopadel.cl/products/nox-x-one-evo" },
+  ],
+  "nox-drone-2023":             [
+    { tiendaSlug: "sursports-cl",     precio: 215992, url: "https://sursports.cl/collections/palas-de-padel/products/pala-padel-nox-future-control-12k-alum-nfa" },
+    { tiendaSlug: "padelshopchile",   precio: 219990, url: "https://www.padelshopchile.cl/palas-de-padel/nox" },
+  ],
+  "nox-equation-2022":          [
+    { tiendaSlug: "sursports-cl",     precio: 125993, url: "https://sursports.cl/collections/palas-de-padel/products/pala-padel-nox-equation-advanced-series-2024" },
+  ],
 
-  "head-delta-pro-2026":        [{ tiendaSlug: "padelnuestro-cl", precio: 299990, url: "https://padelnuestro.cl/head-delta-pro-2026" }, { tiendaSlug: "padelnuestro-es", precio: 259990, url: "https://padelnuestro.com/head-delta-pro-2026" }],
-  "head-coello-pro-2026":       [{ tiendaSlug: "padelnuestro-cl", precio: 309990, url: "https://padelnuestro.cl/head-coello-pro-2026" }, { tiendaSlug: "padelreference", precio: 269990, url: "https://padelreference.com/head-coello-pro-2026" }],
-  "head-extreme-pro-2025":      [{ tiendaSlug: "padelnuestro-cl", precio: 219990, url: "https://padelnuestro.cl/head-extreme-pro" }, { tiendaSlug: "decathlon-cl", precio: 209990, url: "https://decathlon.cl/head-extreme-pro" }],
-  "head-gravity-pro-2024":      [{ tiendaSlug: "padelnuestro-cl", precio: 179990, url: "https://padelnuestro.cl/head-gravity-pro" }, { tiendaSlug: "padelpoint-cl", precio: 184990, url: "https://padelpoint.cl/head-gravity-pro" }, { tiendaSlug: "padelreference", precio: 154990, url: "https://padelreference.com/head-gravity-pro" }],
-  "head-speed-motion-2025":     [{ tiendaSlug: "decathlon-cl", precio: 89990, url: "https://decathlon.cl/head-speed-motion" }, { tiendaSlug: "padelnuestro-cl", precio: 99990, url: "https://padelnuestro.cl/head-speed-motion" }],
-  "head-alpha-pro-2023":        [{ tiendaSlug: "padelnuestro-cl", precio: 119990, url: "https://padelnuestro.cl/head-alpha-pro" }, { tiendaSlug: "mercadolibre-cl", precio: 109990, url: "https://mercadolibre.cl/head-alpha-pro" }],
+  // ─── ADIDAS ─────────────────────────────────────────────────────────────────
+  "adidas-metalbone-hrd-2026":  [
+    { tiendaSlug: "apasur",           precio: 420000, url: "https://tiendaapasur.cl/categoria-producto/palas/" },
+    { tiendaSlug: "padelaltamira-cl", precio: 389990, url: "https://www.padelaltamira.cl/product/pala-adidas-metalbone-3-5-hrd-2026-ale-galan" },
+    { tiendaSlug: "padelshopchile",   precio: 399990, url: "https://www.padelshopchile.cl/palas-de-padel/adidas" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 379990, url: "https://mercadopadel.cl/products/adidas-metalbone-hrd-3-5-black-red-2026-morral-protector-grip" },
+  ],
+  "adidas-metalbone-hrd-2025":  [
+    { tiendaSlug: "keepon-cl",        precio: 359990, url: "https://keepon.cl/collections/palas/products/pala-adidas-metalbone-hrd-3-4-ale-galan" },
+    { tiendaSlug: "padelshopchile",   precio: 349990, url: "https://www.padelshopchile.cl/palas-de-padel/adidas" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 339990, url: "https://mercadopadel.cl/products/adidas-metalbone-hrd" },
+  ],
+  "adidas-metalbone-33-2024":   [
+    { tiendaSlug: "keepon-cl",        precio: 349990, url: "https://keepon.cl/collections/palas/products/pala-de-padel-adidas-metalbone-3-4" },
+    { tiendaSlug: "padelshopchile",   precio: 329990, url: "https://www.padelshopchile.cl/palas-de-padel/adidas" },
+    { tiendaSlug: "apasur",           precio: 420000, url: "https://tiendaapasur.cl/producto/pala-adidas-metalbone-ctrl-3-3-2024/" },
+  ],
+  "adidas-adipower-ctrl-33-2024":[
+    { tiendaSlug: "padelshopchile",   precio: 219990, url: "https://www.padelshopchile.cl/palas-de-padel/adidas" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 209990, url: "https://mercadopadel.cl/products/adidas-cross-it-light-3-5-2026-martita-ortega-morral-protector-grip" },
+  ],
+  "adidas-metalbone-32-2023":   [
+    { tiendaSlug: "padelshopchile",   precio: 129990, url: "https://www.padelshopchile.cl/palas-de-padel/adidas" },
+  ],
 
-  "babolat-air-veron-2026":     [{ tiendaSlug: "padelnuestro-cl", precio: 259990, url: "https://padelnuestro.cl/babolat-air-veron-2026" }, { tiendaSlug: "padelnuestro-es", precio: 224990, url: "https://padelnuestro.com/babolat-air-veron-2026" }],
-  "babolat-counter-veron-2026": [{ tiendaSlug: "padelnuestro-cl", precio: 239990, url: "https://padelnuestro.cl/babolat-counter-veron-2026" }, { tiendaSlug: "padelreference", precio: 204990, url: "https://padelreference.com/babolat-counter-veron" }],
-  "babolat-technical-veron-2025":[{ tiendaSlug: "padelnuestro-cl", precio: 219990, url: "https://padelnuestro.cl/babolat-technical-veron" }, { tiendaSlug: "padelpoint-cl", precio: 229990, url: "https://padelpoint.cl/babolat-technical-veron" }],
-  "babolat-air-veron-2025":     [{ tiendaSlug: "padelnuestro-cl", precio: 189990, url: "https://padelnuestro.cl/babolat-air-veron-2025" }, { tiendaSlug: "decathlon-cl", precio: 179990, url: "https://decathlon.cl/babolat-air-veron" }],
+  // ─── HEAD ────────────────────────────────────────────────────────────────────
+  "head-delta-pro-2026":        [
+    { tiendaSlug: "padelshopchile",   precio: 369990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 349990, url: "https://mercadopadel.cl/products/head-delta-pro-2026" },
+  ],
+  "head-coello-pro-2026":       [
+    { tiendaSlug: "apasur",           precio: 400000, url: "https://tiendaapasur.cl/categoria-producto/palas/" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 349990, url: "https://mercadopadel.cl/products/head-coello-pro-2026-protector-grip" },
+    { tiendaSlug: "padelaltamira-cl", precio: 389990, url: "https://www.padelaltamira.cl/collection/palas" },
+    { tiendaSlug: "padelshopchile",   precio: 379990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+  ],
+  "head-extreme-pro-2025":      [
+    { tiendaSlug: "padelshopchile",   precio: 309990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 299990, url: "https://mercadopadel.cl/products/head-extreme-pro" },
+  ],
+  "head-gravity-pro-2024":      [
+    { tiendaSlug: "padelshopchile",   precio: 279990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 269990, url: "https://mercadopadel.cl/products/head-gravity-pro" },
+  ],
+  "head-speed-motion-2025":     [
+    { tiendaSlug: "sursports-cl",     precio: 309990, url: "https://sursports.cl/collections/palas-de-padel/products/pala-padel-head-speed-motion-bicolor-2023" },
+    { tiendaSlug: "padelshopchile",   precio: 289990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+  ],
+  "head-alpha-pro-2023":        [
+    { tiendaSlug: "padelshopchile",   precio: 219990, url: "https://www.padelshopchile.cl/palas-de-padel/head" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 199990, url: "https://mercadopadel.cl/products/head-alpha-pro" },
+  ],
 
-  "siux-diablo-rx-2025":        [{ tiendaSlug: "padelnuestro-cl", precio: 289990, url: "https://padelnuestro.cl/siux-diablo-rx" }, { tiendaSlug: "padelnuestro-es", precio: 249990, url: "https://padelnuestro.com/siux-diablo-rx" }],
-  "siux-pegasus-2024":          [{ tiendaSlug: "padelnuestro-cl", precio: 229990, url: "https://padelnuestro.cl/siux-pegasus" }, { tiendaSlug: "padelpoint-cl", precio: 239990, url: "https://padelpoint.cl/siux-pegasus" }],
-  "siux-trilogy-2023":          [{ tiendaSlug: "padelnuestro-cl", precio: 149990, url: "https://padelnuestro.cl/siux-trilogy" }, { tiendaSlug: "mercadolibre-cl", precio: 139990, url: "https://mercadolibre.cl/siux-trilogy" }],
+  // ─── BABOLAT ─────────────────────────────────────────────────────────────────
+  "babolat-air-veron-2026":     [
+    { tiendaSlug: "padelshopchile",   precio: 319990, url: "https://www.padelshopchile.cl/palas-de-padel/babolat" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 299990, url: "https://mercadopadel.cl/products/babolat-technical-vertuo-protector-grip-tarro-pelotas" },
+  ],
+  "babolat-counter-veron-2026": [
+    { tiendaSlug: "padelshopchile",   precio: 289990, url: "https://www.padelshopchile.cl/palas-de-padel/babolat" },
+    { tiendaSlug: "sursports-cl",     precio: 223992, url: "https://sursports.cl/collections/palas-de-padel/products/pala-babolat-technical-veron-2023" },
+  ],
+  "babolat-technical-veron-2025":[
+    { tiendaSlug: "apasur",           precio: 450000, url: "https://tiendaapasur.cl/categoria-producto/palas/" },
+    { tiendaSlug: "padelshopchile",   precio: 369990, url: "https://www.padelshopchile.cl/palas-de-padel/babolat" },
+    { tiendaSlug: "padelaltamira-cl", precio: 399990, url: "https://www.padelaltamira.cl/product/pala-babolat-technical-viper-juan-lebron-3-0-2026" },
+  ],
+  "babolat-air-veron-2025":     [
+    { tiendaSlug: "padelshopchile",   precio: 249990, url: "https://www.padelshopchile.cl/palas-de-padel/babolat" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 239990, url: "https://mercadopadel.cl/products/babolat-air-veron-2025" },
+  ],
 
-  "wilson-bela-pro-v3-2025":    [{ tiendaSlug: "padelnuestro-cl", precio: 209990, url: "https://padelnuestro.cl/wilson-bela-pro-v3" }, { tiendaSlug: "padelreference", precio: 179990, url: "https://padelreference.com/wilson-bela-pro-v3" }, { tiendaSlug: "padelusa", precio: 189990, url: "https://padelusa.com/wilson-bela-pro-v3" }],
-  "wilson-bela-v3-2025":        [{ tiendaSlug: "padelnuestro-cl", precio: 169990, url: "https://padelnuestro.cl/wilson-bela-v3" }, { tiendaSlug: "decathlon-cl", precio: 159990, url: "https://decathlon.cl/wilson-bela-v3" }],
-  "wilson-ultra-team-2024":     [{ tiendaSlug: "decathlon-cl", precio: 69990, url: "https://decathlon.cl/wilson-ultra-team" }, { tiendaSlug: "mercadolibre-cl", precio: 64990, url: "https://mercadolibre.cl/wilson-ultra-team" }],
+  // ─── SIUX ────────────────────────────────────────────────────────────────────
+  "siux-diablo-rx-2025":        [
+    { tiendaSlug: "apasur",           precio: 420000, url: "https://tiendaapasur.cl/categoria-producto/palas/" },
+    { tiendaSlug: "padelshopchile",   precio: 369990, url: "https://www.padelshopchile.cl/palas-de-padel/siux" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 349990, url: "https://mercadopadel.cl/products/pala-de-padel-siux-trilogy-pro-5-protector-grip" },
+  ],
+  "siux-pegasus-2024":          [
+    { tiendaSlug: "padelshopchile",   precio: 299990, url: "https://www.padelshopchile.cl/palas-de-padel/siux" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 279990, url: "https://mercadopadel.cl/products/siux-pegasus-2024" },
+  ],
+  "siux-trilogy-2023":          [
+    { tiendaSlug: "padelshopchile",   precio: 219990, url: "https://www.padelshopchile.cl/palas-de-padel/siux" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 199990, url: "https://mercadopadel.cl/products/siux-trilogy-2023" },
+  ],
 
-  "starvie-triton-pro-2025":    [{ tiendaSlug: "padelnuestro-cl", precio: 299990, url: "https://padelnuestro.cl/starvie-triton-pro" }, { tiendaSlug: "padelnuestro-es", precio: 259990, url: "https://padelnuestro.com/starvie-triton-pro" }],
-  "starvie-raptor-2024":        [{ tiendaSlug: "padelnuestro-cl", precio: 219990, url: "https://padelnuestro.cl/starvie-raptor" }, { tiendaSlug: "padelpoint-cl", precio: 229990, url: "https://padelpoint.cl/starvie-raptor" }],
-  "starvie-aquila-2023":        [{ tiendaSlug: "padelnuestro-cl", precio: 149990, url: "https://padelnuestro.cl/starvie-aquila" }, { tiendaSlug: "mercadolibre-cl", precio: 139990, url: "https://mercadolibre.cl/starvie-aquila" }],
+  // ─── WILSON ──────────────────────────────────────────────────────────────────
+  "wilson-bela-pro-v3-2025":    [
+    { tiendaSlug: "padelshopchile",   precio: 289990, url: "https://www.padelshopchile.cl/palas-de-padel/wilson" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 279990, url: "https://mercadopadel.cl/products/wilson-bela-pro-v3" },
+  ],
+  "wilson-bela-v3-2025":        [
+    { tiendaSlug: "padelshopchile",   precio: 219990, url: "https://www.padelshopchile.cl/palas-de-padel/wilson" },
+  ],
+  "wilson-ultra-team-2024":     [
+    { tiendaSlug: "padelshopchile",   precio: 119990, url: "https://www.padelshopchile.cl/palas-de-padel/wilson" },
+  ],
 
-  "dunlop-fx-pro-2024":         [{ tiendaSlug: "padelnuestro-cl", precio: 189990, url: "https://padelnuestro.cl/dunlop-fx-pro" }, { tiendaSlug: "padelreference", precio: 164990, url: "https://padelreference.com/dunlop-fx-pro" }],
-  "dunlop-fx-team-2025":        [{ tiendaSlug: "decathlon-cl", precio: 89990, url: "https://decathlon.cl/dunlop-fx-team" }, { tiendaSlug: "padelnuestro-cl", precio: 99990, url: "https://padelnuestro.cl/dunlop-fx-team" }],
+  // ─── STARVIE ─────────────────────────────────────────────────────────────────
+  "starvie-triton-pro-2025":    [
+    { tiendaSlug: "padelshopchile",   precio: 329990, url: "https://www.padelshopchile.cl/palas-de-padel/starvie" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 309990, url: "https://mercadopadel.cl/products/starvie-triton-pro" },
+  ],
+  "starvie-raptor-2024":        [
+    { tiendaSlug: "padelshopchile",   precio: 249990, url: "https://www.padelshopchile.cl/palas-de-padel/starvie" },
+  ],
+  "starvie-aquila-2023":        [
+    { tiendaSlug: "padelshopchile",   precio: 189990, url: "https://www.padelshopchile.cl/palas-de-padel/starvie" },
+  ],
 
-  "varlion-lw-summum-carbon-2024":[{ tiendaSlug: "padelnuestro-cl", precio: 319990, url: "https://padelnuestro.cl/varlion-summum-carbon" }, { tiendaSlug: "padelnuestro-es", precio: 279990, url: "https://padelnuestro.com/varlion-summum-carbon" }],
-  "dropshot-explorer-2024":     [{ tiendaSlug: "decathlon-cl", precio: 39990, url: "https://decathlon.cl/dropshot-explorer" }, { tiendaSlug: "mercadolibre-cl", precio: 34990, url: "https://mercadolibre.cl/dropshot-explorer" }],
-  "black-crown-piton-2024":     [{ tiendaSlug: "padelnuestro-cl", precio: 159990, url: "https://padelnuestro.cl/black-crown-piton" }, { tiendaSlug: "padelreference", precio: 134990, url: "https://padelreference.com/black-crown-piton" }],
-  "akkeron-circle-xtreme-2024": [{ tiendaSlug: "padelnuestro-cl", precio: 239990, url: "https://padelnuestro.cl/akkeron-circle-xtreme" }, { tiendaSlug: "solspadel", precio: 209990, url: "https://solspadel.com/akkeron-circle" }],
-  "vibora-black-mamba-2025":    [{ tiendaSlug: "padelnuestro-cl", precio: 249990, url: "https://padelnuestro.cl/vibora-black-mamba" }, { tiendaSlug: "padelnuestro-es", precio: 214990, url: "https://padelnuestro.com/vibora-black-mamba" }],
-  "tecnifibre-curva-2025":      [{ tiendaSlug: "padelnuestro-cl", precio: 149990, url: "https://padelnuestro.cl/tecnifibre-curva" }, { tiendaSlug: "padelreference", precio: 124990, url: "https://padelreference.com/tecnifibre-curva" }],
-  "joma-winner-2024":           [{ tiendaSlug: "decathlon-cl", precio: 49990, url: "https://decathlon.cl/joma-winner" }, { tiendaSlug: "mercadolibre-cl", precio: 44990, url: "https://mercadolibre.cl/joma-winner" }],
-  "royal-padel-m27-2023":       [{ tiendaSlug: "padelnuestro-cl", precio: 179990, url: "https://padelnuestro.cl/royal-padel-m27" }, { tiendaSlug: "mercadolibre-cl", precio: 149990, url: "https://mercadolibre.cl/royal-padel-m27" }],
+  // ─── DUNLOP ──────────────────────────────────────────────────────────────────
+  "dunlop-fx-pro-2024":         [
+    { tiendaSlug: "padelshopchile",   precio: 209990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 189990, url: "https://mercadopadel.cl/products/dunlop-fx-pro" },
+  ],
+  "dunlop-fx-team-2025":        [
+    { tiendaSlug: "mercadopadel-cl",  precio: 119990, url: "https://mercadopadel.cl/products/dunlop-fx-team" },
+  ],
+
+  // ─── VARLION ─────────────────────────────────────────────────────────────────
+  "varlion-lw-summum-carbon-2024":[
+    { tiendaSlug: "padelshopchile",   precio: 349990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
+
+  // ─── DROP SHOT ───────────────────────────────────────────────────────────────
+  "dropshot-explorer-2024":     [
+    { tiendaSlug: "mercadopadel-cl",  precio: 79990, url: "https://mercadopadel.cl/products/dropshot-explorer" },
+  ],
+
+  // ─── BLACK CROWN ─────────────────────────────────────────────────────────────
+  "black-crown-piton-2024":     [
+    { tiendaSlug: "padelshopchile",   precio: 169990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+    { tiendaSlug: "mercadopadel-cl",  precio: 159990, url: "https://mercadopadel.cl/products/black-crown-piton" },
+  ],
+
+  // ─── AKKERON ─────────────────────────────────────────────────────────────────
+  "akkeron-circle-xtreme-2024": [
+    { tiendaSlug: "sursports-cl",     precio: 139995, url: "https://sursports.cl/collections/palas-de-padel/products/pala-akkeron-legacy-poseidon-carbon" },
+    { tiendaSlug: "padelshopchile",   precio: 259990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
+
+  // ─── VIBOR-A ─────────────────────────────────────────────────────────────────
+  "vibora-black-mamba-2025":    [
+    { tiendaSlug: "mercadopadel-cl",  precio: 279990, url: "https://mercadopadel.cl/products/vibora-black-mamba-2025" },
+    { tiendaSlug: "padelshopchile",   precio: 289990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
+
+  // ─── TECNIFIBRE ──────────────────────────────────────────────────────────────
+  "tecnifibre-curva-2025":      [
+    { tiendaSlug: "mercadopadel-cl",  precio: 124990, url: "https://mercadopadel.cl/products/pala-tecnifibre-wall-breaker-365-gonzalo-alfonso-tarro-pelotas-protector-grip" },
+    { tiendaSlug: "padelshopchile",   precio: 139990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
+
+  // ─── JOMA ────────────────────────────────────────────────────────────────────
+  "joma-winner-2024":           [
+    { tiendaSlug: "sursports-cl",     precio: 71996, url: "https://sursports.cl/collections/palas-de-padel/products/pala-padel-joma-tournament-flex-negro-rojo" },
+    { tiendaSlug: "padelshopchile",   precio: 119990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
+
+  // ─── ROYAL PADEL ─────────────────────────────────────────────────────────────
+  "royal-padel-m27-2023":       [
+    { tiendaSlug: "padelshopchile",   precio: 199990, url: "https://www.padelshopchile.cl/palas-de-padel" },
+  ],
 };
 
 async function main() {
