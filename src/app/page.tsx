@@ -43,7 +43,7 @@ export default function HomePage() {
 
       <main>
         {/* Hero — dark full-bleed */}
-        <section className="relative min-h-screen overflow-hidden bg-[#080808]">
+        <section className="relative min-h-screen overflow-hidden" style={{ background: "linear-gradient(135deg, #0D1B2A 0%, #0a1520 40%, #111d2b 100%)" }}>
           {/* Imagen: player stays right, left naturally dark */}
           <Image
             src="/hero-player.jpg"
