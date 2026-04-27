@@ -25,9 +25,20 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    await new Promise(r => setTimeout(r, 800));
-    setError("Registro no configurado aún. Pronto disponible.");
-    setLoading(false);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email, password: form.password, nombre: form.nombre }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error ?? "Error al crear cuenta."); return; }
+      window.location.href = "/mi-padel";
+    } catch {
+      setError("Error de conexión. Intentá de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

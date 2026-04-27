@@ -15,10 +15,25 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    // TODO: integrate auth provider
-    await new Promise(r => setTimeout(r, 800));
-    setError("Autenticación no configurada aún. Pronto disponible.");
-    setLoading(false);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error ?? "Error al iniciar sesión."); return; }
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get("redirect");
+      if (data.rol === "operador") window.location.href = redirect ?? "/operador";
+      else if (data.rol === "admin_cancha") window.location.href = redirect ?? "/club";
+      else if (data.rol === "admin") window.location.href = redirect ?? "/admin";
+      else window.location.href = redirect ?? "/mi-padel";
+    } catch {
+      setError("Error de conexión. Intentá de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

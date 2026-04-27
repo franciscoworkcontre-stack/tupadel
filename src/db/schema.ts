@@ -196,6 +196,10 @@ export const users = pgTable("users", {
   ladoPreferido: varchar("lado_preferido", { length: 10 }), // drive | reves
   palaActualId: uuid("pala_actual_id").references(() => palas.id),
   categoriaEstimada: integer("categoria_estimada"), // 1-6
+  rol: varchar("rol", { length: 30 }).notNull().default("jugador"), // jugador | operador | admin_cancha | admin
+  avatarUrl: text("avatar_url"),
+  telefono: varchar("telefono", { length: 30 }),
+  passwordHash: text("password_hash"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -397,6 +401,268 @@ export const articulos = pgTable("articulos", {
 // RELATIONS
 // ============================================================
 
+// ============================================================
+// RETIROS & CAMPS
+// ============================================================
+
+export const operadores = pgTable("operadores", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  slug: varchar("slug", { length: 200 }).notNull().unique(),
+  nombreEmpresa: varchar("nombre_empresa", { length: 200 }).notNull(),
+  rut: varchar("rut", { length: 20 }),
+  descripcionMd: text("descripcion_md"),
+  logoUrl: text("logo_url"),
+  sitioWeb: text("sitio_web"),
+  instagram: varchar("instagram", { length: 100 }),
+  telefono: varchar("telefono", { length: 30 }),
+  paisBase: varchar("pais_base", { length: 10 }).default("CL"),
+  estado: varchar("estado", { length: 30 }).notNull().default("pendiente"), // pendiente | verificado | suspendido
+  verificadoAt: timestamp("verificado_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const retiros = pgTable(
+  "retiros",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    operadorId: uuid("operador_id").notNull().references(() => operadores.id, { onDelete: "cascade" }),
+    slug: varchar("slug", { length: 300 }).notNull().unique(),
+    titulo: varchar("titulo", { length: 300 }).notNull(),
+    subtitulo: varchar("subtitulo", { length: 400 }),
+    descripcionMd: text("descripcion_md"),
+    pais: varchar("pais", { length: 10 }).notNull().default("CL"),
+    ciudad: varchar("ciudad", { length: 100 }),
+    lugarNombre: varchar("lugar_nombre", { length: 300 }),
+    lugarDireccion: text("lugar_direccion"),
+    lat: real("lat"),
+    lng: real("lng"),
+    genero: varchar("genero", { length: 20 }).notNull().default("mixto"), // mixto | hombres | mujeres
+    nivelMin: integer("nivel_min").notNull().default(1),
+    nivelMax: integer("nivel_max").notNull().default(6),
+    diasDuracion: integer("dias_duracion").notNull(),
+    nochesDuracion: integer("noches_duracion"),
+    imagenPrincipal: text("imagen_principal"),
+    imagenes: text("imagenes").array().default([]),
+    incluyeJson: jsonb("incluye_json"), // [{icono, texto}]
+    noIncluyeJson: jsonb("no_incluye_json"),
+    idiomas: text("idiomas").array().default(["es"]),
+    estado: varchar("estado", { length: 30 }).notNull().default("borrador"), // borrador | en_revision | publicado | pausado | archivado
+    destacado: boolean("destacado").default(false),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (t) => [
+    index("retiros_operador_idx").on(t.operadorId),
+    index("retiros_pais_idx").on(t.pais),
+    index("retiros_genero_idx").on(t.genero),
+  ]
+);
+
+export const retiroEdiciones = pgTable(
+  "retiro_ediciones",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    retiroId: uuid("retiro_id").notNull().references(() => retiros.id, { onDelete: "cascade" }),
+    nombre: varchar("nombre", { length: 200 }),
+    fechaInicio: timestamp("fecha_inicio").notNull(),
+    fechaFin: timestamp("fecha_fin").notNull(),
+    cupoTotal: integer("cupo_total").notNull(),
+    cupoDisponible: integer("cupo_disponible").notNull(),
+    precioClp: integer("precio_clp").notNull(),
+    precioDolar: real("precio_dolar"),
+    precioEuro: real("precio_euro"),
+    moneda: varchar("moneda", { length: 5 }).notNull().default("CLP"),
+    habitacionTipo: varchar("habitacion_tipo", { length: 50 }), // individual | doble | compartida
+    estado: varchar("estado", { length: 30 }).notNull().default("abierta"), // abierta | cerrada | agotada | cancelada
+    notas: text("notas"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [index("retiro_ediciones_retiro_idx").on(t.retiroId), index("retiro_ediciones_fecha_idx").on(t.fechaInicio)]
+);
+
+export const retiroItinerario = pgTable("retiro_itinerario", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  retiroId: uuid("retiro_id").notNull().references(() => retiros.id, { onDelete: "cascade" }),
+  dia: integer("dia").notNull(), // 1, 2, 3...
+  horaInicio: varchar("hora_inicio", { length: 5 }),
+  horaFin: varchar("hora_fin", { length: 5 }),
+  titulo: varchar("titulo", { length: 200 }).notNull(),
+  descripcion: text("descripcion"),
+  tipo: varchar("tipo", { length: 30 }).default("actividad"), // actividad | comida | descanso | traslado
+  orden: integer("orden").default(0),
+});
+
+export const retiroCoaches = pgTable("retiro_coaches", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  retiroId: uuid("retiro_id").notNull().references(() => retiros.id, { onDelete: "cascade" }),
+  coachId: uuid("coach_id").references(() => coaches.id),
+  nombreExterno: varchar("nombre_externo", { length: 200 }),
+  rolEnRetiro: varchar("rol_en_retiro", { length: 100 }),
+  bioCorta: text("bio_corta"),
+  imagenUrl: text("imagen_url"),
+});
+
+export const retiroServiciosExtras = pgTable("retiro_servicios_extras", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  retiroId: uuid("retiro_id").notNull().references(() => retiros.id, { onDelete: "cascade" }),
+  nombre: varchar("nombre", { length: 200 }).notNull(),
+  descripcion: text("descripcion"),
+  precioClp: integer("precio_clp").notNull(),
+  obligatorio: boolean("obligatorio").default(false),
+});
+
+export const retiroConsultas = pgTable(
+  "retiro_consultas",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    edicionId: uuid("edicion_id").notNull().references(() => retiroEdiciones.id),
+    retiroId: uuid("retiro_id").notNull().references(() => retiros.id),
+    nombre: varchar("nombre", { length: 200 }).notNull(),
+    email: varchar("email", { length: 300 }).notNull(),
+    telefono: varchar("telefono", { length: 30 }),
+    mensaje: text("mensaje"),
+    participantes: integer("participantes").default(1),
+    userId: uuid("user_id").references(() => users.id),
+    estado: varchar("estado", { length: 30 }).notNull().default("nueva"), // nueva | respondida | convertida | descartada
+    respondidaAt: timestamp("respondida_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [index("retiro_consultas_edicion_idx").on(t.edicionId)]
+);
+
+export const retiroReservas = pgTable(
+  "retiro_reservas",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    edicionId: uuid("edicion_id").notNull().references(() => retiroEdiciones.id),
+    retiroId: uuid("retiro_id").notNull().references(() => retiros.id),
+    consultaId: uuid("consulta_id").references(() => retiroConsultas.id),
+    userId: uuid("user_id").references(() => users.id),
+    nombre: varchar("nombre", { length: 200 }).notNull(),
+    email: varchar("email", { length: 300 }).notNull(),
+    telefono: varchar("telefono", { length: 30 }),
+    participantes: integer("participantes").notNull().default(1),
+    habitacionTipo: varchar("habitacion_tipo", { length: 50 }),
+    extrasSeleccionados: jsonb("extras_seleccionados"),
+    totalClp: integer("total_clp").notNull(),
+    montoSeniaClp: integer("monto_senia_clp"),
+    estadoPago: varchar("estado_pago", { length: 30 }).notNull().default("pendiente"), // pendiente | senia_pagada | pagado | reembolsado
+    estadoReserva: varchar("estado_reserva", { length: 30 }).notNull().default("confirmada"), // confirmada | cancelada | lista_espera
+    notas: text("notas"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [index("retiro_reservas_edicion_idx").on(t.edicionId)]
+);
+
+export const retiroMensajes = pgTable("retiro_mensajes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  consultaId: uuid("consulta_id").references(() => retiroConsultas.id),
+  reservaId: uuid("reserva_id").references(() => retiroReservas.id),
+  autorId: uuid("autor_id").references(() => users.id),
+  autorTipo: varchar("autor_tipo", { length: 20 }).notNull(), // operador | cliente
+  contenido: text("contenido").notNull(),
+  leido: boolean("leido").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const retiroReviews = pgTable("retiro_reviews", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  retiroId: uuid("retiro_id").notNull().references(() => retiros.id, { onDelete: "cascade" }),
+  reservaId: uuid("reserva_id").references(() => retiroReservas.id),
+  userId: uuid("user_id").references(() => users.id),
+  nombre: varchar("nombre", { length: 200 }),
+  ratingTotal: integer("rating_total").notNull(), // 1-5
+  ratingCoaches: integer("rating_coaches"),
+  ratingAlojamiento: integer("rating_alojamiento"),
+  ratingOrganizacion: integer("rating_organizacion"),
+  ratingRelacionCalidadPrecio: integer("rating_relacion_calidad_precio"),
+  comentario: text("comentario"),
+  publicado: boolean("publicado").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ============================================================
+// ADMINISTRADORES DE CANCHAS
+// ============================================================
+
+export const canchaAdmins = pgTable(
+  "cancha_admins",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    clubId: uuid("club_id").notNull().references(() => clubes.id, { onDelete: "cascade" }),
+    cargo: varchar("cargo", { length: 100 }),
+    permisos: text("permisos").array().default(["lectura"]), // lectura | edicion | reservas | precios | admin
+    activo: boolean("activo").default(true),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("cancha_admins_user_club_idx").on(t.userId, t.clubId),
+    index("cancha_admins_club_idx").on(t.clubId),
+  ]
+);
+
+export const canchaHorarios = pgTable(
+  "cancha_horarios",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clubId: uuid("club_id").notNull().references(() => clubes.id, { onDelete: "cascade" }),
+    canchaNumero: integer("cancha_numero").notNull().default(1),
+    diaSemana: integer("dia_semana").notNull(), // 0=dom...6=sab
+    horaInicio: varchar("hora_inicio", { length: 5 }).notNull(),
+    horaFin: varchar("hora_fin", { length: 5 }).notNull(),
+    duracionSlotMin: integer("duracion_slot_min").notNull().default(90),
+    precioClp: integer("precio_clp").notNull(),
+    tipo: varchar("tipo", { length: 30 }).notNull().default("regular"), // regular | prime | nocturno
+    disponible: boolean("disponible").default(true),
+  },
+  (t) => [index("cancha_horarios_club_dia_idx").on(t.clubId, t.diaSemana)]
+);
+
+export const canchaReservas = pgTable(
+  "cancha_reservas",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clubId: uuid("club_id").notNull().references(() => clubes.id, { onDelete: "cascade" }),
+    canchaNumero: integer("cancha_numero").notNull().default(1),
+    userId: uuid("user_id").references(() => users.id),
+    nombre: varchar("nombre", { length: 200 }).notNull(),
+    email: varchar("email", { length: 300 }),
+    telefono: varchar("telefono", { length: 30 }),
+    fecha: timestamp("fecha").notNull(),
+    horaInicio: varchar("hora_inicio", { length: 5 }).notNull(),
+    horaFin: varchar("hora_fin", { length: 5 }).notNull(),
+    duracionMin: integer("duracion_min").notNull().default(90),
+    precioClp: integer("precio_clp").notNull(),
+    estadoPago: varchar("estado_pago", { length: 30 }).notNull().default("pendiente"), // pendiente | pagado | reembolsado
+    estadoReserva: varchar("estado_reserva", { length: 30 }).notNull().default("confirmada"), // confirmada | cancelada | no_presentado
+    notasAdmin: text("notas_admin"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("cancha_reservas_club_fecha_idx").on(t.clubId, t.fecha),
+    index("cancha_reservas_user_idx").on(t.userId),
+  ]
+);
+
+export const canchaNotificaciones = pgTable("cancha_notificaciones", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clubId: uuid("club_id").notNull().references(() => clubes.id, { onDelete: "cascade" }),
+  userId: uuid("user_id").references(() => users.id),
+  tipo: varchar("tipo", { length: 50 }).notNull(), // nueva_reserva | cancelacion | review | recordatorio
+  titulo: varchar("titulo", { length: 300 }).notNull(),
+  mensaje: text("mensaje"),
+  leida: boolean("leida").default(false),
+  referenciaId: uuid("referencia_id"),
+  referenciaTabla: varchar("referencia_tabla", { length: 50 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ============================================================
+// RELATIONS
+// ============================================================
+
 export const palasRelations = relations(palas, ({ many }) => ({
   precios: many(preciosPalas),
   reviews: many(reviewsPalas),
@@ -411,4 +677,27 @@ export const preciosPalasRelations = relations(preciosPalas, ({ one }) => ({
 export const clubesRelations = relations(clubes, ({ many }) => ({
   precios: many(preciosCanchas),
   reviews: many(reviewsCanchas),
+  admins: many(canchaAdmins),
+  horarios: many(canchaHorarios),
+  reservas: many(canchaReservas),
+}));
+
+export const operadoresRelations = relations(operadores, ({ one, many }) => ({
+  user: one(users, { fields: [operadores.userId], references: [users.id] }),
+  retiros: many(retiros),
+}));
+
+export const retirosRelations = relations(retiros, ({ one, many }) => ({
+  operador: one(operadores, { fields: [retiros.operadorId], references: [operadores.id] }),
+  ediciones: many(retiroEdiciones),
+  itinerario: many(retiroItinerario),
+  coaches: many(retiroCoaches),
+  extras: many(retiroServiciosExtras),
+  reviews: many(retiroReviews),
+}));
+
+export const retiroEdicionesRelations = relations(retiroEdiciones, ({ one, many }) => ({
+  retiro: one(retiros, { fields: [retiroEdiciones.retiroId], references: [retiros.id] }),
+  consultas: many(retiroConsultas),
+  reservas: many(retiroReservas),
 }));
