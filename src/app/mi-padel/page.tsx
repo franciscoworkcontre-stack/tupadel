@@ -48,13 +48,13 @@ export default function MiPadelPage() {
           <div className="md:col-span-8 bg-canvas-warm border border-line rounded-2xl p-7">
             <div className="flex items-center justify-between mb-3">
               <div className="mono text-xs uppercase tracking-wider text-ink-soft font-semibold">→ Drill de la semana</div>
-              <span className="mono text-xs text-[#00B85C] font-semibold">↗ 1 de 3 sesiones</span>
+              <span className="mono text-xs text-[#A8E63A] font-semibold">↗ 1 de 3 sesiones</span>
             </div>
             <h3 className="display text-2xl md:text-3xl font-semibold mb-3 leading-tight">Bandeja cruzada → globo táctico</h3>
             <p className="text-ink-muted mb-5">Trabajás los dos golpes prioridad 1 de Cat 4 en una secuencia táctica realista.</p>
             <div className="flex items-center gap-4">
-              <button className="bg-[#00B85C] text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#008F47] transition-colors">Marcar sesión completada</button>
-              <Link href="/drills/bandeja-cruzada-globo-tactico" className="text-sm font-semibold text-[#00B85C]">Ver detalle →</Link>
+              <button className="bg-[#A8E63A] text-[#0D1B2A] px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#7DB81E] transition-colors">Marcar sesión completada</button>
+              <Link href="/drills/bandeja-cruzada-globo-tactico" className="text-sm font-semibold text-[#A8E63A]">Ver detalle →</Link>
             </div>
           </div>
 
@@ -73,13 +73,13 @@ export default function MiPadelPage() {
                   <div className="w-10 h-12 bg-gradient-to-b from-[#DC2626] to-ink rounded-md flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-sm truncate">{a.nombre}</div>
-                    <div className="mono text-xs text-[#00B85C]">↓ {a.bajada} ({a.tienda})</div>
+                    <div className="mono text-xs text-[#A8E63A]">↓ {a.bajada} ({a.tienda})</div>
                   </div>
-                  <button className="mono text-[11px] text-[#00B85C] font-semibold">Ver →</button>
+                  <button className="mono text-[11px] text-[#A8E63A] font-semibold">Ver →</button>
                 </div>
               ))}
             </div>
-            <button className="w-full mt-4 text-sm font-semibold text-[#00B85C] border border-[#00B85C]/30 py-2 rounded-lg hover:bg-[#D1FAE5]/30 transition-colors">
+            <button className="w-full mt-4 text-sm font-semibold text-[#A8E63A] border border-[#A8E63A]/30 py-2 rounded-lg hover:bg-[#ECFCCB]/30 transition-colors">
               + Nueva alerta
             </button>
           </div>
@@ -106,14 +106,14 @@ export default function MiPadelPage() {
                     <div className="mono text-xs text-ink-muted">{p.pareja}</div>
                   </div>
                   <div className="text-right">
-                    <div className={`mono text-sm font-semibold ${p.gano ? "text-[#008F47]" : ""}`}>{p.resultado}</div>
-                    <div className={`mono text-[10px] ${p.gano ? "text-[#008F47]" : "text-[#E8590C]"}`}>{p.gano ? "VICTORIA" : "DERROTA"}</div>
+                    <div className={`mono text-sm font-semibold ${p.gano ? "text-[#7DB81E]" : ""}`}>{p.resultado}</div>
+                    <div className={`mono text-[10px] ${p.gano ? "text-[#7DB81E]" : "text-[#E8590C]"}`}>{p.gano ? "VICTORIA" : "DERROTA"}</div>
                   </div>
                 </div>
               ))}
             </div>
             <div className="mt-5 pt-5 border-t border-line grid grid-cols-4 gap-4">
-              {[{ label: "Últimos 30d", val: "12" }, { label: "Wins", val: "8", color: "#008F47" }, { label: "Losses", val: "4", color: "#E8590C" }, { label: "Win rate", val: "67%" }].map((s) => (
+              {[{ label: "Últimos 30d", val: "12" }, { label: "Wins", val: "8", color: "#7DB81E" }, { label: "Losses", val: "4", color: "#E8590C" }, { label: "Win rate", val: "67%" }].map((s) => (
                 <div key={s.label}>
                   <div className="mono text-[10px] text-ink-soft uppercase">{s.label}</div>
                   <div className="stat-num text-2xl" style={s.color ? { color: s.color } : {}}>{s.val}</div>
@@ -143,7 +143,7 @@ export default function MiPadelPage() {
                 </div>
               ))}
             </div>
-            <Link href="/torneos" className="block mt-4 text-[#00B85C] font-semibold text-sm">Ver todos los torneos →</Link>
+            <Link href="/torneos" className="block mt-4 text-[#A8E63A] font-semibold text-sm">Ver todos los torneos →</Link>
           </div>
         </div>
       </main>

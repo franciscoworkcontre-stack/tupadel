@@ -195,15 +195,15 @@ export default async function CategoriaPage({ params }: Props) {
         {/* Domina / Falta */}
         <section className="px-6 md:px-8 py-12 md:py-14 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
           <div>
-            <div className="mono text-xs uppercase tracking-widest text-[#00B85C] font-semibold mb-3">✓ LO QUE YA DOMINÁS</div>
+            <div className="mono text-xs uppercase tracking-widest text-[#A8E63A] font-semibold mb-3">✓ LO QUE YA DOMINÁS</div>
             <h2 className="display text-2xl md:text-3xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>
               Si estás en Cat {n}, esto debería estar consolidado.
             </h2>
             <div className="space-y-3">
               {cat.domina.map((g) => (
-                <div key={g.golpe} className="border border-line rounded-lg p-4 bg-[#D1FAE5]/20">
+                <div key={g.golpe} className="border border-line rounded-lg p-4 bg-[#ECFCCB]/20">
                   <div className="flex items-start gap-3">
-                    <span className="text-[#008F47] font-bold mt-0.5">✓</span>
+                    <span className="text-[#7DB81E] font-bold mt-0.5">✓</span>
                     <div>
                       <div className="font-semibold text-sm">{g.golpe}</div>
                       <div className="text-xs text-ink-muted mt-0.5">{g.desc}</div>
@@ -247,7 +247,7 @@ export default async function CategoriaPage({ params }: Props) {
             <div className="mono text-xs uppercase tracking-widest text-ink-soft mb-4">→ ¿No sabés en qué categoría estás?</div>
             <h2 className="display text-3xl md:text-4xl font-semibold mb-4" style={{ letterSpacing: "-0.02em" }}>Hacé el diagnóstico en 3 minutos</h2>
             <p className="text-ink-muted mb-6">14 preguntas que analizan tu ejecución técnica, lectura de juego y experiencia. Resultado inmediato.</p>
-            <Link href="/diagnostico" className="inline-block bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold hover:bg-[#008F47] transition-colors">
+            <Link href="/diagnostico" className="inline-block bg-[#A8E63A] text-[#0D1B2A] px-7 py-4 rounded-lg font-semibold hover:bg-[#7DB81E] transition-colors">
               Hacer diagnóstico gratis →
             </Link>
           </div>

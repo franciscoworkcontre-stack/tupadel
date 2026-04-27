@@ -61,7 +61,7 @@ const tipos = ["golpe", "táctica", "regla", "equipo", "jerga"] as const;
 const letras = [...new Set(terminos.map(t => t.termino[0].toUpperCase()))].sort();
 
 const tipoColors: Record<string, string> = {
-  golpe: "#0891B2", táctica: "#00B85C", equipo: "#D97706", regla: "#DC2626", jerga: "#7C3AED",
+  golpe: "#0891B2", táctica: "#A8E63A", equipo: "#D97706", regla: "#DC2626", jerga: "#7C3AED",
 };
 
 export default function GlosarioPage() {
@@ -109,7 +109,7 @@ export default function GlosarioPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           {t.relacionado ? (
-                            <Link href={t.relacionado} className="font-semibold hover:text-[#00B85C] transition-colors">{t.termino}</Link>
+                            <Link href={t.relacionado} className="font-semibold hover:text-[#A8E63A] transition-colors">{t.termino}</Link>
                           ) : (
                             <span className="font-semibold">{t.termino}</span>
                           )}
@@ -119,7 +119,7 @@ export default function GlosarioPage() {
                         </div>
                         <p className="text-sm text-ink-muted leading-relaxed">{t.definicion}</p>
                         {t.relacionado && (
-                          <Link href={t.relacionado} className="text-xs text-[#00B85C] font-medium mt-1 inline-block">Ver guía completa →</Link>
+                          <Link href={t.relacionado} className="text-xs text-[#A8E63A] font-medium mt-1 inline-block">Ver guía completa →</Link>
                         )}
                       </div>
                     </div>

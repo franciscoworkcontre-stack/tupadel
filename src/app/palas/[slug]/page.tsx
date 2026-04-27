@@ -51,7 +51,7 @@ const palasData: Record<string, {
       { nombre: "MercadoLibre", precio: 269500, envio: "5 días", stock: true },
     ],
     minHistorico: 229990, maxHistorico: 289990,
-    colorFrom: "from-[#008F47]",
+    colorFrom: "from-[#7DB81E]",
   },
 };
 
@@ -113,7 +113,7 @@ export default async function PalaPage({ params }: Props) {
               <div className="grid grid-cols-3 gap-6 flex-1">
                 {[
                   { label: "Potencia", val: pala.pot, color: "#E8590C" },
-                  { label: "Control", val: pala.ctrl, color: "#00B85C" },
+                  { label: "Control", val: pala.ctrl, color: "#A8E63A" },
                   { label: "Salida", val: pala.sal, color: "#0891B2" },
                 ].map((s) => (
                   <div key={s.label}>
@@ -150,7 +150,7 @@ export default async function PalaPage({ params }: Props) {
 
             {/* CTA */}
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <button className="bg-[#00B85C] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#008F47] transition-colors">
+              <button className="bg-[#A8E63A] text-[#0D1B2A] px-6 py-3 rounded-lg font-semibold hover:bg-[#7DB81E] transition-colors">
                 Ver mejor precio: {formatPrice(pala.precioActual)}
               </button>
               <button className="border border-line px-5 py-3 rounded-lg font-medium text-sm hover:border-ink transition-colors">
@@ -174,7 +174,7 @@ export default async function PalaPage({ params }: Props) {
                 Mín. histórico (90d): <span className="mono font-semibold text-ink">{formatPrice(pala.minHistorico)}</span> · Máx: <span className="mono font-semibold text-ink">{formatPrice(pala.maxHistorico)}</span>
               </p>
             </div>
-            <button className="text-sm font-semibold text-[#00B85C]">🔔 Avisame si baja de {formatPrice(pala.minHistorico)}</button>
+            <button className="text-sm font-semibold text-[#A8E63A]">🔔 Avisame si baja de {formatPrice(pala.minHistorico)}</button>
           </div>
           <div className="border border-line rounded-xl overflow-hidden">
             <div className="bg-canvas-warm border-b border-line grid grid-cols-[1.5fr_1fr_0.8fr_1fr_0.6fr] gap-3 px-4 py-3 mono text-[10px] uppercase tracking-wider text-ink-soft font-semibold">
@@ -186,8 +186,8 @@ export default async function PalaPage({ params }: Props) {
                 <div className="flex items-center gap-2">
                   {t.stock ? (
                     <>
-                      <span className={`mono font-bold ${t.mejor ? "text-[#008F47]" : ""}`}>{formatPrice(t.precio)}</span>
-                      {t.mejor && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#D1FAE5] text-[#008F47]">MEJOR</span>}
+                      <span className={`mono font-bold ${t.mejor ? "text-[#7DB81E]" : ""}`}>{formatPrice(t.precio)}</span>
+                      {t.mejor && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#ECFCCB] text-[#7DB81E]">MEJOR</span>}
                     </>
                   ) : (
                     <span className="mono text-ink-muted">Sin stock</span>
@@ -197,7 +197,7 @@ export default async function PalaPage({ params }: Props) {
                 <div className="mono text-xs">{t.envio}</div>
                 <div>
                   {t.stock ? (
-                    <span className="text-[#00B85C] font-semibold cursor-pointer">Ver →</span>
+                    <span className="text-[#A8E63A] font-semibold cursor-pointer">Ver →</span>
                   ) : (
                     <span className="text-ink-soft text-xs">Avisar →</span>
                   )}
@@ -211,11 +211,11 @@ export default async function PalaPage({ params }: Props) {
         <section className="px-6 md:px-8 py-12 border-t border-line bg-canvas-warm max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <div className="mono text-[11px] text-[#008F47] uppercase mb-3 font-semibold">A FAVOR</div>
+              <div className="mono text-[11px] text-[#7DB81E] uppercase mb-3 font-semibold">A FAVOR</div>
               <div className="space-y-2">
                 {pala.pros.map((p) => (
                   <div key={p} className="flex items-start gap-2 text-sm">
-                    <span className="text-[#00B85C] font-bold mt-0.5">✓</span>{p}
+                    <span className="text-[#A8E63A] font-bold mt-0.5">✓</span>{p}
                   </div>
                 ))}
               </div>
@@ -237,9 +237,9 @@ export default async function PalaPage({ params }: Props) {
         <div className="md:hidden fixed bottom-0 left-0 right-0 border-t border-line bg-canvas/95 backdrop-blur px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
             <div className="mono text-[10px] text-ink-soft uppercase">Mejor precio</div>
-            <div className="mono text-base font-bold text-[#008F47]">{formatPrice(pala.precioActual)}</div>
+            <div className="mono text-base font-bold text-[#7DB81E]">{formatPrice(pala.precioActual)}</div>
           </div>
-          <button className="bg-[#00B85C] text-white px-5 py-2.5 rounded-lg font-semibold text-sm">Ver →</button>
+          <button className="bg-[#A8E63A] text-[#0D1B2A] px-5 py-2.5 rounded-lg font-semibold text-sm">Ver →</button>
         </div>
       </main>
       <Footer />

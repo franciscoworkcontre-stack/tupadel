@@ -49,7 +49,7 @@ export default function GolpesPage() {
                 </div>
                 <div className="display text-xl font-semibold mb-2">{g.nombre}</div>
                 <div className="text-sm text-ink-muted">{g.desc}</div>
-                <div className="mt-4 text-sm font-semibold text-[#00B85C]">Ver guía →</div>
+                <div className="mt-4 text-sm font-semibold text-[#A8E63A]">Ver guía →</div>
               </Link>
             ))}
           </div>

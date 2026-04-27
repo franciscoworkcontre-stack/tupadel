@@ -30,7 +30,7 @@ const categorias = [
 
 const topPalas = [
   { slug: "bullpadel-vertex-04", marca: "Bullpadel", modelo: "Vertex 04", anio: 2025, forma: "Diamante", score: "8.4", precio: "$219.990", tiendas: 4, colorFrom: "from-[#DC2626]", pot: 9, ctrl: 6, sal: 7 },
-  { slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", anio: 2025, forma: "Lágrima", score: "9.1", precio: "$254.990", variacion: "↓ 12%", colorFrom: "from-[#008F47]", pot: 8, ctrl: 8, sal: 8 },
+  { slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", anio: 2025, forma: "Lágrima", score: "9.1", precio: "$254.990", variacion: "↓ 12%", colorFrom: "from-[#7DB81E]", pot: 8, ctrl: 8, sal: 8 },
   { slug: "adidas-metalbone-hrd", marca: "Adidas", modelo: "Metalbone HRD+", anio: 2025, forma: "Redonda", score: "7.9", precio: "$184.990", tiendas: 6, colorFrom: "from-[#0891B2]", pot: 6, ctrl: 9, sal: 8 },
   { slug: "head-delta-pro-2026", marca: "Head", modelo: "Delta Pro 2026", anio: 2025, forma: "Diamante", score: "8.7", precio: "$239.990", tiendas: 5, colorFrom: "from-[#E8590C]", pot: 9, ctrl: 7, sal: 7 },
 ];
@@ -71,7 +71,7 @@ export default function HomePage() {
                 >
                   Un lugar para
                   <br />
-                  <span className="italic font-normal" style={{ color: "#00B85C" }}>todo</span> tu pádel.
+                  <span className="italic font-normal" style={{ color: "#A8E63A" }}>todo</span> tu pádel.
                 </h1>
                 <p className="text-lg md:text-xl text-white/65 mt-6 md:mt-8 max-w-xl leading-relaxed">
                   Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — en un solo lugar, para el jugador amateur de Chile y LATAM.
@@ -79,7 +79,7 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
                   <Link
                     href="/diagnostico"
-                    className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
+                    className="bg-[#A8E63A] text-[#0D1B2A] px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#7DB81E] transition-colors"
                   >
                     Descubrí tu nivel real <span>→</span>
                   </Link>
@@ -127,11 +127,11 @@ export default function HomePage() {
               { tag: "02 · EQUIPO", title: "La pala correcta para tu juego", desc: "Reviews honestas comparadas en 6 tiendas. Recomendador según tu nivel y estilo. Histórico de precios, alertas de bajada, sin publicidad.", href: "/palas" },
               { tag: "03 · CANCHAS Y COMUNIDAD", title: "Jugá más y mejor", desc: "Directorio de clubes con precios reales por franja. Encontrá compañero de tu nivel y zona. Todo lo que necesitás para armar punto.", href: "/canchas" },
             ].map((p) => (
-              <Link key={p.tag} href={p.href} className="border border-line rounded-xl p-7 bg-canvas hover:border-[#00B85C] transition-colors group">
-                <div className="mono text-xs text-[#00B85C] mb-3">{p.tag}</div>
+              <Link key={p.tag} href={p.href} className="border border-line rounded-xl p-7 bg-canvas hover:border-[#A8E63A] transition-colors group">
+                <div className="mono text-xs text-[#A8E63A] mb-3">{p.tag}</div>
                 <h3 className="display text-2xl font-semibold mb-3">{p.title}</h3>
                 <p className="text-ink-muted text-sm leading-relaxed mb-5">{p.desc}</p>
-                <span className="text-sm font-semibold text-[#00B85C]">Explorar →</span>
+                <span className="text-sm font-semibold text-[#A8E63A]">Explorar →</span>
               </Link>
             ))}
           </div>
@@ -214,7 +214,7 @@ export default function HomePage() {
             <p className="text-ink-muted text-lg mt-5 leading-relaxed">
               El diagnóstico analiza tu ejecución técnica, lectura de juego y experiencia competitiva para darte una categoría estimada de 1 a 6 con tu ruta personalizada.
             </p>
-            <Link href="/diagnostico" className="inline-block mt-8 bg-[#00B85C] text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#008F47] transition-colors">
+            <Link href="/diagnostico" className="inline-block mt-8 bg-[#A8E63A] text-[#0D1B2A] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#7DB81E] transition-colors">
               Hacer diagnóstico gratis →
             </Link>
             <div className="mono text-xs text-ink-soft mt-4">Sin registro · Resultado inmediato · Enviado a tu email</div>

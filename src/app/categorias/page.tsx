@@ -29,7 +29,7 @@ export default function CategoriasPage() {
             <p className="text-ink-muted text-xl mt-5 max-w-2xl leading-relaxed">
               El sistema FPCH define 6 categorías de nivel para el pádel amateur. Cada una tiene golpes específicos que dominar y una ruta clara para subir.
             </p>
-            <Link href="/diagnostico" className="inline-block mt-8 bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold hover:bg-[#008F47] transition-colors">
+            <Link href="/diagnostico" className="inline-block mt-8 bg-[#A8E63A] text-[#0D1B2A] px-7 py-4 rounded-lg font-semibold hover:bg-[#7DB81E] transition-colors">
               Descubrir mi categoría en 3 min →
             </Link>
           </div>

@@ -101,7 +101,7 @@ export default function ReglasPage() {
           {secciones.map((sec, si) => (
             <section key={sec.id} id={sec.id}>
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-8 h-8 rounded-full bg-[#00B85C] text-white flex items-center justify-center font-bold flex-shrink-0 text-sm">{si + 1}</div>
+                <div className="w-8 h-8 rounded-full bg-[#A8E63A] text-[#0D1B2A] flex items-center justify-center font-bold flex-shrink-0 text-sm">{si + 1}</div>
                 <h2 className="display text-2xl font-semibold" style={{ letterSpacing: "-0.02em" }}>{sec.titulo}</h2>
               </div>
               <div className="space-y-4 pl-12">

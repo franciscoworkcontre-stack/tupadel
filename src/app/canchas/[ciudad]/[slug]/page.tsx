@@ -137,7 +137,7 @@ export default async function ClubPage({ params }: Props) {
           <div className="md:col-span-5">
             <div className="aspect-[4/3] bg-gradient-to-br from-canvas-warm to-canvas-dim rounded-2xl border border-line flex items-center justify-center relative overflow-hidden">
               {/* Court diagram */}
-              <div className="w-48 h-32 border-2 border-ink rounded relative bg-[#D1FAE5]/30">
+              <div className="w-48 h-32 border-2 border-ink rounded relative bg-[#ECFCCB]/30">
                 <div className="absolute inset-x-0 top-1/2 h-px bg-ink" />
                 <div className="absolute inset-y-0 left-1/2 w-px bg-ink" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 border border-ink rounded-full" />
@@ -193,7 +193,7 @@ export default async function ClubPage({ params }: Props) {
                     <span className="font-semibold">{f.tipo}</span>
                     <span className="text-ink-muted ml-2 text-xs">{f.dias} · {f.horario}</span>
                   </div>
-                  <span className={`mono font-bold ${f.precio === precioMax ? "text-[#E8590C]" : f.precio === precioMin ? "text-[#008F47]" : ""}`}>
+                  <span className={`mono font-bold ${f.precio === precioMax ? "text-[#E8590C]" : f.precio === precioMin ? "text-[#7DB81E]" : ""}`}>
                     {formatPrice(f.precio)}<span className="text-ink-soft font-normal text-xs">/h</span>
                   </span>
                 </div>
@@ -207,7 +207,7 @@ export default async function ClubPage({ params }: Props) {
                   href={`https://wa.me/${club.whatsapp.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#00B85C] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#008F47] transition-colors"
+                  className="bg-[#A8E63A] text-[#0D1B2A] px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#7DB81E] transition-colors"
                 >
                   Reservar por WhatsApp →
                 </a>
@@ -250,7 +250,7 @@ export default async function ClubPage({ params }: Props) {
                 <div key={i} className="border border-line rounded-xl p-5 bg-canvas">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00B85C] to-[#0891B2] flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#A8E63A] to-[#0891B2] flex items-center justify-center text-white text-xs font-bold">
                         {op.autor[0]}
                       </div>
                       <div>

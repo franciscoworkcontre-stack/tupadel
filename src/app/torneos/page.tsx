@@ -56,7 +56,7 @@ export default function TorneosPage() {
                 </div>
                 <div className="flex-shrink-0">
                   <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
-                    t.inscripcion === "Abierta" ? "bg-[#D1FAE5] text-[#008F47]" : "bg-canvas-dim text-ink-muted"
+                    t.inscripcion === "Abierta" ? "bg-[#ECFCCB] text-[#7DB81E]" : "bg-canvas-dim text-ink-muted"
                   }`}>
                     {t.inscripcion}
                   </span>

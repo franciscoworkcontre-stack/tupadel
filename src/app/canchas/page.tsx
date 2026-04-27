@@ -45,7 +45,7 @@ export default function CanchasPage() {
                 <div className="display text-2xl font-semibold mb-2">{c.nombre}</div>
                 <div className="mono text-sm text-ink-muted">{c.clubes} clubes</div>
                 <div className="mono text-sm text-ink-muted mt-0.5">Desde {formatPrice(c.desde)}/h</div>
-                <div className="mt-5 text-sm font-semibold text-[#00B85C]">Ver canchas →</div>
+                <div className="mt-5 text-sm font-semibold text-[#A8E63A]">Ver canchas →</div>
               </Link>
             ))}
           </div>

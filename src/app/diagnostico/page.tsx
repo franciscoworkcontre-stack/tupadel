@@ -270,18 +270,18 @@ export default function DiagnosticoPage() {
                 placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 border border-line rounded-lg px-4 py-3 text-sm outline-none focus:border-[#00B85C]"
+                className="flex-1 border border-line rounded-lg px-4 py-3 text-sm outline-none focus:border-[#A8E63A]"
               />
               <button
                 onClick={enviar}
                 disabled={enviando || !email}
-                className="bg-[#00B85C] text-white px-5 py-3 rounded-lg font-semibold text-sm disabled:opacity-50"
+                className="bg-[#A8E63A] text-[#0D1B2A] px-5 py-3 rounded-lg font-semibold text-sm disabled:opacity-50"
               >
                 {enviando ? "Enviando..." : "Ver ruta →"}
               </button>
             </div>
           </div>
-          <Link href={`/categorias/${resultado.categoria}`} className="inline-block mt-6 text-sm text-[#00B85C] font-semibold">
+          <Link href={`/categorias/${resultado.categoria}`} className="inline-block mt-6 text-sm text-[#A8E63A] font-semibold">
             Ver ruta Cat {resultado.categoria} sin registrarme →
           </Link>
         </div>
@@ -298,7 +298,7 @@ export default function DiagnosticoPage() {
           <Link href="/" className="text-sm text-ink-muted">Salir</Link>
         </div>
       </nav>
-      <div className="h-1 bg-canvas-dim"><div className="h-1 bg-[#00B85C] transition-all duration-300" style={{ width: `${progreso}%` }} /></div>
+      <div className="h-1 bg-canvas-dim"><div className="h-1 bg-[#A8E63A] transition-all duration-300" style={{ width: `${progreso}%` }} /></div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-10 md:py-16 grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-4">
@@ -317,20 +317,20 @@ export default function DiagnosticoPage() {
                 onClick={() => elegir(op.id, op.valor)}
                 className={`w-full border-2 rounded-xl p-4 md:p-5 text-left transition-all ${
                   isSelected
-                    ? "border-[#00B85C] bg-[#D1FAE5]/30"
+                    ? "border-[#A8E63A] bg-[#ECFCCB]/30"
                     : "border-line hover:border-ink"
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1.5">
-                      <span className={`mono text-xs px-2 py-0.5 rounded ${isSelected ? "bg-[#00B85C] text-white" : "bg-canvas-dim"}`}>
+                      <span className={`mono text-xs px-2 py-0.5 rounded ${isSelected ? "bg-[#A8E63A] text-[#0D1B2A]" : "bg-canvas-dim"}`}>
                         {op.id}
                       </span>
                       <span className="font-semibold text-sm md:text-base">{op.texto}</span>
                     </div>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ml-3 ${isSelected ? "bg-[#00B85C] border-[#00B85C]" : "border-line"}`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ml-3 ${isSelected ? "bg-[#A8E63A] border-[#A8E63A]" : "border-line"}`}>
                     {isSelected && <span className="text-white text-xs">✓</span>}
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default function DiagnosticoPage() {
         </button>
         <div className="flex items-center gap-1.5">
           {preguntas.map((_, i) => (
-            <div key={i} className={`w-2 h-2 rounded-full ${i < current ? "bg-[#00B85C]" : i === current ? "bg-ink" : "border border-line"}`} />
+            <div key={i} className={`w-2 h-2 rounded-full ${i < current ? "bg-[#A8E63A]" : i === current ? "bg-ink" : "border border-line"}`} />
           ))}
         </div>
         <button

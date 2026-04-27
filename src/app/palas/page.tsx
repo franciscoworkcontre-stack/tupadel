@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const palas = [
   { slug: "bullpadel-vertex-04", marca: "Bullpadel", modelo: "Vertex 04", anio: 2025, forma: "Diamante", nivel: "Cat 1–3", score: 8.4, precio: 219990, colorFrom: "from-[#DC2626]", pot: 9, ctrl: 6, sal: 7 },
-  { slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", anio: 2025, forma: "Lágrima", nivel: "Cat 2–4", score: 9.1, precio: 254990, variacion: -12, colorFrom: "from-[#008F47]", pot: 8, ctrl: 8, sal: 8 },
+  { slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", anio: 2025, forma: "Lágrima", nivel: "Cat 2–4", score: 9.1, precio: 254990, variacion: -12, colorFrom: "from-[#7DB81E]", pot: 8, ctrl: 8, sal: 8 },
   { slug: "adidas-metalbone-hrd", marca: "Adidas", modelo: "Metalbone HRD+", anio: 2025, forma: "Redonda", nivel: "Cat 3–5", score: 7.9, precio: 184990, colorFrom: "from-[#0891B2]", pot: 6, ctrl: 9, sal: 8 },
   { slug: "head-delta-pro-2026", marca: "Head", modelo: "Delta Pro 2026", anio: 2025, forma: "Diamante", nivel: "Cat 1–2", score: 8.7, precio: 239990, colorFrom: "from-[#E8590C]", pot: 9, ctrl: 7, sal: 7 },
   { slug: "bullpadel-hack-04", marca: "Bullpadel", modelo: "Hack 04", anio: 2025, forma: "Redonda", nivel: "Cat 4–6", score: 8.1, precio: 149990, colorFrom: "from-[#D97706]", pot: 6, ctrl: 9, sal: 7 },
@@ -39,7 +39,7 @@ export default function PalasPage() {
               Precios actualizados diariamente en 6 tiendas. Histórico de 90 días. Reviews editoriales honestas.
             </p>
             <div className="flex items-center gap-3 mt-7 flex-wrap">
-              <Link href="/palas/recomendador" className="bg-[#00B85C] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#008F47] transition-colors">
+              <Link href="/palas/recomendador" className="bg-[#A8E63A] text-[#0D1B2A] px-6 py-3 rounded-lg font-semibold hover:bg-[#7DB81E] transition-colors">
                 ¿Qué pala me conviene? →
               </Link>
               <Link href="/palas/comparar" className="border border-line px-5 py-3 rounded-lg font-medium text-sm hover:border-ink transition-colors">

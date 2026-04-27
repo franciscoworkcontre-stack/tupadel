@@ -314,7 +314,7 @@ export default function GolpePage({ params }: { params: { slug: string } }) {
                     <div className="font-semibold">{e.error}</div>
                   </div>
                   <div className="ml-7 text-sm text-ink-muted flex items-start gap-2">
-                    <span className="text-[#00B85C] font-bold">→</span>
+                    <span className="text-[#A8E63A] font-bold">→</span>
                     <span>{e.fix}</span>
                   </div>
                 </div>

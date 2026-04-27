@@ -127,7 +127,7 @@ export default async function CiudadPage({ params }: Props) {
               <Link key={club.slug} href={`/canchas/${ciudad}/${club.slug}`} className="block border border-line rounded-xl overflow-hidden hover:border-ink transition-colors">
                 <div className="flex">
                   <div className="w-32 md:w-48 bg-gradient-to-br from-canvas-warm to-canvas-dim flex items-center justify-center flex-shrink-0">
-                    <div className="w-20 md:w-32 h-14 md:h-20 border-2 border-ink rounded relative bg-[#D1FAE5]/30">
+                    <div className="w-20 md:w-32 h-14 md:h-20 border-2 border-ink rounded relative bg-[#ECFCCB]/30">
                       <div className="absolute inset-x-0 top-1/2 h-px bg-ink" />
                       <div className="absolute inset-y-0 left-1/2 w-px bg-ink" />
                     </div>
@@ -138,7 +138,7 @@ export default async function CiudadPage({ params }: Props) {
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="display text-base md:text-xl font-semibold">{club.nombre}</h3>
                           {club.verificado && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#D1FAE5] text-[#008F47]">VERIF.</span>
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#ECFCCB] text-[#7DB81E]">VERIF.</span>
                           )}
                           {club.subio && (
                             <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#FFE4D1] text-[#E8590C]">↑ PRECIO</span>
@@ -186,7 +186,7 @@ export default async function CiudadPage({ params }: Props) {
                 className="absolute"
                 style={{ top: `${20 + i * 20}%`, left: `${25 + (i % 3) * 25}%` }}
               >
-                <div className={`px-2.5 py-1 rounded-full mono text-xs font-bold shadow-lg text-white ${i === 0 ? "bg-[#00B85C]" : "bg-ink"}`}>
+                <div className={`px-2.5 py-1 rounded-full mono text-xs font-bold shadow-lg text-white ${i === 0 ? "bg-[#A8E63A]" : "bg-ink"}`}>
                   {formatPrice(club.precioRegular)}
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default async function CiudadPage({ params }: Props) {
             <div className="absolute bottom-4 left-4 right-4 bg-canvas border border-line rounded-lg p-3 shadow-lg">
               <div className="mono text-[10px] uppercase text-ink-soft mb-1">Leyenda</div>
               <div className="flex items-center gap-3 text-xs">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00B85C]" />Mejor precio</div>
+                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#A8E63A]" />Mejor precio</div>
                 <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-ink" />Otros clubes</div>
               </div>
             </div>

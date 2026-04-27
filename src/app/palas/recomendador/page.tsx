@@ -84,7 +84,7 @@ function calcularRecomendaciones(respuestas: Record<string, Record<string, numbe
     },
     {
       slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", precio: "$254.990",
-      score: "9.1", forma: "Lágrima", colorFrom: "from-[#008F47]", score_int: 0,
+      score: "9.1", forma: "Lágrima", colorFrom: "from-[#7DB81E]", score_int: 0,
       por_que: "La más equilibrada del mercado. Punto dulce amplio, funciona para todos los golpes.",
     },
     {
@@ -190,7 +190,7 @@ export default function RecomendadorPage() {
                 </div>
                 <div className="text-right flex-shrink-0">
                   <div className="mono text-lg font-bold">{p.precio}</div>
-                  <div className="text-[#00B85C] font-semibold text-sm mt-1">Ver →</div>
+                  <div className="text-[#A8E63A] font-semibold text-sm mt-1">Ver →</div>
                 </div>
               </Link>
             ))}
@@ -218,7 +218,7 @@ export default function RecomendadorPage() {
           <Link href="/palas" className="text-sm text-ink-muted">Salir</Link>
         </div>
       </nav>
-      <div className="h-1 bg-canvas-dim"><div className="h-1 bg-[#00B85C] transition-all duration-300" style={{ width: `${progreso}%` }} /></div>
+      <div className="h-1 bg-canvas-dim"><div className="h-1 bg-[#A8E63A] transition-all duration-300" style={{ width: `${progreso}%` }} /></div>
 
       <main className="max-w-[800px] mx-auto px-6 py-14">
         <div className="mono text-xs text-ink-soft uppercase tracking-widest mb-5">→ Recomendador de pala</div>
@@ -232,14 +232,14 @@ export default function RecomendadorPage() {
               <button
                 key={op.id}
                 onClick={() => elegir(op)}
-                className={`w-full border-2 rounded-xl p-5 text-left transition-all ${isSelected ? "border-[#00B85C] bg-[#D1FAE5]/30" : "border-line hover:border-ink"}`}
+                className={`w-full border-2 rounded-xl p-5 text-left transition-all ${isSelected ? "border-[#A8E63A] bg-[#ECFCCB]/30" : "border-line hover:border-ink"}`}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-semibold">{op.texto}</div>
                     {op.desc && <div className="text-sm text-ink-muted mt-0.5">{op.desc}</div>}
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ml-4 ${isSelected ? "bg-[#00B85C] border-[#00B85C]" : "border-line"}`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ml-4 ${isSelected ? "bg-[#A8E63A] border-[#A8E63A]" : "border-line"}`}>
                     {isSelected && <span className="text-white text-xs">✓</span>}
                   </div>
                 </div>
@@ -259,7 +259,7 @@ export default function RecomendadorPage() {
         </button>
         <div className="flex items-center gap-1.5">
           {pasos.map((_, i) => (
-            <div key={i} className={`w-2 h-2 rounded-full ${i < step ? "bg-[#00B85C]" : i === step ? "bg-ink" : "border border-line"}`} />
+            <div key={i} className={`w-2 h-2 rounded-full ${i < step ? "bg-[#A8E63A]" : i === step ? "bg-ink" : "border border-line"}`} />
           ))}
         </div>
         <button

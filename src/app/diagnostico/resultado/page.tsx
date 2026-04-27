@@ -21,7 +21,7 @@ const catData: Record<string, {
     faltan: [{ golpe: "Estrategia por rival", prio: 1 }, { golpe: "Mental game bajo presión", prio: 1 }, { golpe: "Preparación física específica", prio: 2 }],
     palas: [
       { marca: "Bullpadel", modelo: "Vertex 04", precio: "$219.990", colorFrom: "from-[#DC2626]" },
-      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#008F47]" },
+      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#7DB81E]" },
       { marca: "Siux", modelo: "Diablo RX", precio: "$289.990", colorFrom: "from-[#7C3AED]" },
     ],
     drill: { nombre: "Punto táctico bajo presión", duracion: "45 min · en cuadro", desc: "Jugás puntos con reglas restrictivas que obligan a decidir rápido bajo presión competitiva." },
@@ -33,7 +33,7 @@ const catData: Record<string, {
     palas: [
       { marca: "Head", modelo: "Delta Pro 2026", precio: "$239.990", colorFrom: "from-[#E8590C]" },
       { marca: "Babolat", modelo: "Air Veron", precio: "$209.990", colorFrom: "from-[#DC2626]" },
-      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#008F47]" },
+      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#7DB81E]" },
     ],
     drill: { nombre: "Remate + presión red", duracion: "35 min · en pareja", desc: "Uno ataca con smash, el otro defiende y contraataca. Rotación cada 10 minutos." },
   },
@@ -53,7 +53,7 @@ const catData: Record<string, {
     descripcion: "El nivel donde el pádel se vuelve un juego de decisiones. Sabés cómo pegarle; ahora toca aprender cuándo y por qué.",
     faltan: [{ golpe: "Víbora", prio: 1 }, { golpe: "Globo táctico", prio: 1 }, { golpe: "Bajada de tres metros", prio: 2 }, { golpe: "Contrapared ofensiva", prio: 2 }],
     palas: [
-      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#008F47]" },
+      { marca: "Nox", modelo: "AT10 Genius", precio: "$254.990", colorFrom: "from-[#7DB81E]" },
       { marca: "Adidas", modelo: "Metalbone HRD+", precio: "$184.990", colorFrom: "from-[#0891B2]" },
       { marca: "Nox", modelo: "ML10 Pro Cup", precio: "$199.990", colorFrom: "from-[#0891B2]" },
     ],
@@ -129,7 +129,7 @@ async function ResultadoContent({
             </p>
             {email && (
               <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-canvas border border-line mono text-xs">
-                <span className="text-[#00B85C]">✓</span> Enviado a {email}
+                <span className="text-[#A8E63A]">✓</span> Enviado a {email}
               </div>
             )}
           </div>
@@ -178,7 +178,7 @@ async function ResultadoContent({
                 </div>
                 <Link
                   href={`/golpes/${g.golpe.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}`}
-                  className="ml-auto text-[#00B85C] font-semibold text-sm flex-shrink-0"
+                  className="ml-auto text-[#A8E63A] font-semibold text-sm flex-shrink-0"
                 >
                   Ver guía →
                 </Link>
@@ -203,7 +203,7 @@ async function ResultadoContent({
             <div className="bg-canvas border border-line rounded-2xl p-7 md:p-8">
               <div className="flex items-center justify-between mb-4">
                 <div className="mono text-xs uppercase tracking-wider text-ink-soft">Drill recomendado · Cat {cat}</div>
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#D1FAE5] text-[#008F47]">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#ECFCCB] text-[#7DB81E]">
                   {data.drill.duracion}
                 </span>
               </div>
@@ -212,7 +212,7 @@ async function ResultadoContent({
               </h3>
               <p className="text-ink-muted leading-relaxed">{data.drill.desc}</p>
               <div className="mt-6 flex items-center gap-4">
-                <Link href="/drills" className="bg-[#00B85C] text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#008F47] transition-colors">
+                <Link href="/drills" className="bg-[#A8E63A] text-[#0D1B2A] px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#7DB81E] transition-colors">
                   Ver todos los drills →
                 </Link>
               </div>
@@ -245,7 +245,7 @@ async function ResultadoContent({
             ))}
           </div>
           <div className="mt-5 text-center">
-            <Link href="/palas/recomendador" className="text-sm font-semibold text-[#00B85C]">
+            <Link href="/palas/recomendador" className="text-sm font-semibold text-[#A8E63A]">
               Quiz de pala personalizado →
             </Link>
           </div>

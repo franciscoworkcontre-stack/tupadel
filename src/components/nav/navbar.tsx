@@ -32,7 +32,7 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
               href={l.href}
               className={`text-sm font-medium transition-colors ${
                 dark
-                  ? activeSection === l.href ? "text-[#00B85C]" : "text-white/70 hover:text-white"
+                  ? activeSection === l.href ? "text-[#A8E63A]" : "text-white/70 hover:text-white"
                   : activeSection === l.href ? "text-padel" : "text-ink hover:text-padel"
               }`}
             >
@@ -79,7 +79,7 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
           ))}
           <Link
             href="/diagnostico"
-            className="block bg-[#00B85C] text-white text-sm font-semibold px-4 py-3 rounded-lg text-center mt-2"
+            className="block bg-[#A8E63A] text-[#0D1B2A] text-sm font-semibold px-4 py-3 rounded-lg text-center mt-2"
             onClick={() => setOpen(false)}
           >
             Hacer diagnóstico → 3 min

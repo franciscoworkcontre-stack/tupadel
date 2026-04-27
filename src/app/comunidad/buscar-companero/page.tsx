@@ -66,7 +66,7 @@ export default function BuscarCompaneroPage() {
               </div>
               <button
                 onClick={() => setShowForm(true)}
-                className="bg-[#00B85C] text-white font-semibold px-6 py-3 rounded-xl flex-shrink-0 hover:bg-[#009F4F] transition-colors"
+                className="bg-[#A8E63A] text-[#0D1B2A] font-semibold px-6 py-3 rounded-xl flex-shrink-0 hover:bg-[#7DB81E] transition-colors"
               >
                 + Publicar mi perfil
               </button>
@@ -158,13 +158,13 @@ export default function BuscarCompaneroPage() {
 
                 {/* CTA */}
                 {contactado === j.id ? (
-                  <div className="mt-auto py-2 rounded-lg bg-[#D1FAE5] text-[#00B85C] text-center text-sm font-semibold">
+                  <div className="mt-auto py-2 rounded-lg bg-[#ECFCCB] text-[#A8E63A] text-center text-sm font-semibold">
                     ✓ Solicitud enviada
                   </div>
                 ) : (
                   <button
                     onClick={() => setContactado(j.id)}
-                    className="mt-auto border-2 border-[#00B85C] text-[#00B85C] font-semibold py-2 rounded-xl text-sm hover:bg-[#00B85C] hover:text-white transition-colors"
+                    className="mt-auto border-2 border-[#A8E63A] text-[#A8E63A] font-semibold py-2 rounded-xl text-sm hover:bg-[#A8E63A] hover:text-white transition-colors"
                   >
                     Contactar
                   </button>
@@ -180,7 +180,7 @@ export default function BuscarCompaneroPage() {
               <div className="text-ink-muted mb-6">Sé el primero en publicar tu perfil</div>
               <button
                 onClick={() => setShowForm(true)}
-                className="bg-[#00B85C] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#009F4F] transition-colors"
+                className="bg-[#A8E63A] text-[#0D1B2A] font-semibold px-6 py-3 rounded-xl hover:bg-[#7DB81E] transition-colors"
               >
                 Publicar mi perfil
               </button>
@@ -228,7 +228,7 @@ export default function BuscarCompaneroPage() {
               </div>
               <button
                 onClick={() => { setShowForm(false); }}
-                className="w-full bg-[#00B85C] text-white font-semibold py-3 rounded-xl hover:bg-[#009F4F] transition-colors mt-2"
+                className="w-full bg-[#A8E63A] text-[#0D1B2A] font-semibold py-3 rounded-xl hover:bg-[#7DB81E] transition-colors mt-2"
               >
                 Publicar perfil
               </button>

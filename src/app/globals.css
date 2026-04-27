@@ -7,23 +7,23 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono: var(--font-jetbrains-mono), monospace;
-  --font-heading: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-roboto), system-ui, sans-serif;
+  --font-display: var(--font-montserrat), system-ui, sans-serif;
+  --font-mono: var(--font-montserrat), system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), system-ui, sans-serif;
 
-  /* tupadel design tokens */
-  --color-ink: #0A0A0A;
-  --color-ink-muted: #525252;
-  --color-ink-soft: #737373;
+  /* tupadel design tokens — Pulso brand */
+  --color-ink: #0D1B2A;
+  --color-ink-muted: #6B7280;
+  --color-ink-soft: #9CA3AF;
   --color-canvas: #FFFFFF;
-  --color-canvas-warm: #FAFAF9;
-  --color-canvas-dim: #F5F5F4;
-  --color-line: #E5E5E5;
-  --color-line-strong: #D4D4D4;
-  --color-padel: #00B85C;
-  --color-padel-dark: #008F47;
-  --color-padel-light: #D1FAE5;
+  --color-canvas-warm: #F9FAFB;
+  --color-canvas-dim: #F3F4F6;
+  --color-line: #E5E7EB;
+  --color-line-strong: #D1D5DB;
+  --color-padel: #A8E63A;
+  --color-padel-dark: #7DB81E;
+  --color-padel-light: #ECFCCB;
   --color-court: #E8590C;
   --color-court-light: #FFE4D1;
   --color-cat1: #DC2626;
@@ -145,29 +145,30 @@
   }
   body {
     @apply bg-canvas text-ink antialiased;
-    font-feature-settings: "ss01", "cv11";
   }
   html {
-    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-family: var(--font-roboto), system-ui, sans-serif;
   }
 }
 
 @layer utilities {
   .display {
-    font-family: var(--font-fraunces), Georgia, serif;
-    font-feature-settings: "ss01";
+    font-family: var(--font-montserrat), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
   .mono {
-    font-family: var(--font-jetbrains-mono), monospace;
+    font-family: var(--font-montserrat), system-ui, sans-serif;
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
   }
   .num {
     font-variant-numeric: tabular-nums;
   }
   .stat-num {
-    font-family: var(--font-fraunces), Georgia, serif;
-    font-weight: 600;
-    font-feature-settings: "ss01";
+    font-family: var(--font-montserrat), system-ui, sans-serif;
+    font-weight: 800;
     letter-spacing: -0.03em;
   }
   .text-balance {
