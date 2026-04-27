@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
 import { db } from "@/db";
@@ -42,6 +43,7 @@ export default async function PalasPage() {
       perfilControl: palas.perfilControl,
       perfilSalida: palas.perfilSalida,
       scoreEditorial: palas.scoreEditorial,
+      imagenPrincipal: palas.imagenPrincipal,
     })
     .from(palas)
     .where(eq(palas.publicada, true))
@@ -107,13 +109,23 @@ export default async function PalasPage() {
                   href={`/palas/${p.slug}`}
                   className="border border-line rounded-xl overflow-hidden bg-canvas hover:border-ink-muted transition-colors"
                 >
-                  <div className="aspect-[4/5] bg-gradient-to-br from-canvas-warm to-canvas-dim flex items-center justify-center relative">
-                    <div className={`w-24 md:w-32 h-36 md:h-44 bg-gradient-to-b ${colorFrom} to-ink rounded-[40%/30%] shadow-xl`} />
-                    <span className="absolute top-3 left-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] border border-line bg-canvas">
+                  <div className="aspect-[4/5] bg-gradient-to-br from-canvas-warm to-canvas-dim flex items-center justify-center relative overflow-hidden">
+                    {p.imagenPrincipal ? (
+                      <Image
+                        src={p.imagenPrincipal}
+                        alt={`${p.marca} ${p.modelo}`}
+                        fill
+                        className="object-contain p-4"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <div className={`w-24 md:w-32 h-36 md:h-44 bg-gradient-to-b ${colorFrom} to-ink rounded-[40%/30%] shadow-xl`} />
+                    )}
+                    <span className="absolute top-3 left-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] border border-line bg-canvas z-10">
                       {formaLabel[p.forma] ?? p.forma}
                     </span>
                     {p.scoreEditorial && (
-                      <span className="absolute top-3 right-3 mono text-xs font-semibold bg-ink text-white px-2 py-0.5 rounded">
+                      <span className="absolute top-3 right-3 mono text-xs font-semibold bg-ink text-white px-2 py-0.5 rounded z-10">
                         {p.scoreEditorial.toFixed(1)}
                       </span>
                     )}
