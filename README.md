@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tupadel
 
-## Getting Started
+El copiloto del jugador amateur de pádel en LATAM. Reviews de palas con comparador de precios, diagnóstico de nivel Cat 1–6, directorio de canchas y comunidad.
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16 (App Router) + TypeScript
+- **Estilos**: Tailwind CSS v4 + shadcn/ui
+- **DB**: Postgres en Supabase con Drizzle ORM
+- **Email**: Resend (newsletter + alertas de precio)
+- **Hosting**: Vercel
+- **Scrapers**: Vercel Cron + Inngest
+
+## Setup
 
 ```bash
+cp .env.local.example .env.local
+# Rellenar variables en .env.local
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Ver `.env.local.example` para la lista completa.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Descripción |
+|---|---|
+| `DATABASE_URL` | Postgres (Supabase) |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL de tu proyecto Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Anon key de Supabase |
+| `RESEND_API_KEY` | Para emails de alertas y newsletter |
 
-## Learn More
+## Comandos
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Desarrollo
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Migraciones DB
+npx drizzle-kit generate
+npx drizzle-kit push
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Seed inicial
+DATABASE_URL=... npx tsx scripts/seed.ts
 
-## Deploy on Vercel
+# Scrapers (ejecutar manualmente o vía cron)
+npx tsx scripts/scraper-padelnuestro.ts
+npx tsx scripts/scraper-mercadolibre.ts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Build
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Rutas
+
+```
+/                          Landing
+/diagnostico               Quiz de nivel (14 preguntas)
+/palas                     Listado + filtros
+/palas/[slug]              Ficha + comparador + histórico
+/canchas                   Directorio de ciudades
+/canchas/[ciudad]          Lista + mapa
+/golpes                    Hub de técnica
+/golpes/[slug]             Guía de cada golpe
+/categorias                Hub Cat 1–6
+/categorias/[n]            Ruta de aprendizaje
+/torneos                   Calendario
+/mi-padel                  Dashboard usuario
+```
+
+## Diseño
+
+- **Tipografía**: Fraunces (display) + DM Sans (UI) + JetBrains Mono (datos)
+- **Paleta**: Canvas blanco, verde pádel (#00B85C), naranja court (#E8590C)
+- **Referencia visual**: mockup en `tupadel-mockups.html`
+
+## Monetización
+
+1. Afiliados: Padelnuestro, Decathlon, Time2Padel, MercadoLibre
+2. Listados destacados: canchas y coaches
+3. Contenido patrocinado: marcas (Bullpadel, Adidas, Nox, Head, Babolat)
+4. Newsletter premium
