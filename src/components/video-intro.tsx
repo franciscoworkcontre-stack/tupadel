@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
 export function VideoIntro() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,20 +58,6 @@ export function VideoIntro() {
       >
         <source src="/hero-intro.mp4" type="video/mp4" />
       </video>
-
-      {/* Logo centered over video */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="relative w-48 md:w-64 drop-shadow-2xl">
-          <Image
-            src="/logo-full.png"
-            alt="Pulso Pádel"
-            width={400}
-            height={225}
-            className="w-full h-auto"
-            priority
-          />
-        </div>
-      </div>
 
       {/* Skip button */}
       <button
