@@ -40,65 +40,93 @@ export default function HomePage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="px-6 md:px-8 pt-16 md:pt-20 pb-20 md:pb-24 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+        <section className="px-6 md:px-8 pt-16 md:pt-20 pb-20 md:pb-24 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-7">
             <div className="mono text-xs text-ink-soft uppercase tracking-widest mb-5 md:mb-6">
-              ↗ El copiloto del jugador amateur
+              ↗ Todo lo que necesitás para jugar mejor
             </div>
             <h1 className="display text-5xl md:text-7xl font-semibold leading-[0.95] text-balance" style={{ letterSpacing: "-0.03em" }}>
-              Tu pádel,
+              Un lugar para
               <br />
-              <span className="italic font-normal">en piloto</span> automático.
+              <span className="italic font-normal">todo</span> tu pádel.
             </h1>
             <p className="text-lg md:text-xl text-ink-muted mt-6 md:mt-8 max-w-xl leading-relaxed">
-              Descubrí tu categoría real, qué entrenar para subir, qué pala te conviene y dónde
-              jugarla. Reviews honestas, precios reales, comunidad activa.
+              Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — todo en un solo lugar, para el jugador amateur de Chile y LATAM.
             </p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
               <Link
                 href="/diagnostico"
                 className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
               >
-                Hacer diagnóstico de nivel <span>→</span>
+                Descubrí tu nivel real <span>→</span>
               </Link>
               <span className="mono text-xs text-ink-soft">3 min · gratis · 12.847 jugadores</span>
             </div>
           </div>
-          <div className="md:col-span-5">
-            <div className="bg-canvas-warm rounded-2xl p-5 md:p-6 border border-line">
-              <div className="flex items-baseline justify-between mb-4">
-                <span className="mono text-xs uppercase tracking-wider text-ink-soft">Comparador en vivo</span>
-                <span className="mono text-xs text-[#00B85C]">↗ actualizado hoy</span>
-              </div>
-              <div className="display text-xl md:text-2xl font-semibold mb-1">Bullpadel Vertex 04</div>
-              <div className="mono text-xs text-ink-soft mb-5">Diamante · 365–375g · 2025</div>
-              <div className="space-y-0">
-                {[
-                  { tienda: "Padelnuestro", precio: "$219.990", mejor: true },
-                  { tienda: "Decathlon CL", precio: "$229.990" },
-                  { tienda: "MercadoLibre", precio: "$234.500" },
-                  { tienda: "Time2Padel", precio: "$249.990" },
-                ].map((row) => (
-                  <div key={row.tienda} className="flex items-center justify-between py-2 border-b border-line last:border-0">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-line rounded-sm" />
-                      <span className="text-sm">{row.tienda}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {row.mejor && (
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#D1FAE5] text-[#008F47]">
-                          MEJOR
-                        </span>
-                      )}
-                      <span className={`mono text-sm font-semibold ${row.mejor ? "text-[#008F47]" : ""}`}>{row.precio}</span>
-                    </div>
-                  </div>
+
+          {/* SVG Pala */}
+          <div className="md:col-span-5 flex items-center justify-center">
+            <div className="relative">
+              {/* Glow de fondo */}
+              <div className="absolute inset-0 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, #00B85C 0%, transparent 70%)", transform: "scale(1.4)" }} />
+              <svg
+                viewBox="0 0 220 380"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-48 md:w-64 relative drop-shadow-2xl"
+                aria-label="Pala de pádel"
+              >
+                {/* Sombra difusa */}
+                <ellipse cx="110" cy="370" rx="45" ry="8" fill="#0A0A0A" opacity="0.15" />
+
+                {/* Grip / Mango */}
+                <rect x="82" y="268" width="56" height="95" rx="14" fill="#1A1A1A" />
+                {/* Líneas del grip */}
+                {[280, 292, 304, 316, 328, 340].map(y => (
+                  <rect key={y} x="82" y={y} width="56" height="2.5" rx="1.25" fill="#2E2E2E" />
                 ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-line flex items-center justify-between">
-                <span className="text-xs text-ink-soft">Mín. histórico: <span className="mono font-semibold text-ink">$199.990</span></span>
-                <Link href="/palas/bullpadel-vertex-04" className="text-xs text-[#00B85C] font-semibold">Ver ficha completa →</Link>
-              </div>
+                {/* Detalle inferior del grip */}
+                <rect x="82" y="350" width="56" height="13" rx="10" fill="#111" />
+
+                {/* Cuerpo de la pala - forma redondeada */}
+                <path
+                  d="M110 12 C60 12 22 52 22 110 L22 230 C22 258 64 278 110 278 C156 278 198 258 198 230 L198 110 C198 52 160 12 110 12Z"
+                  fill="#0A0A0A"
+                />
+
+                {/* Franja de color (verde) */}
+                <path
+                  d="M22 185 L198 185 L198 205 C198 205 198 210 180 212 L40 212 C22 210 22 205 22 205Z"
+                  fill="#00B85C"
+                  opacity="0.9"
+                />
+                {/* Segunda franja (naranja) más delgada */}
+                <path
+                  d="M22 178 L198 178 L198 185 L22 185Z"
+                  fill="#E8590C"
+                  opacity="0.7"
+                />
+
+                {/* Agujeros — grid 5 cols × 8 filas */}
+                {[...Array(8)].map((_, row) =>
+                  [...Array(5)].map((_, col) => {
+                    const cx = 55 + col * 28;
+                    const cy = 40 + row * 26;
+                    if (cy > 170) return null;
+                    if (row === 0 && (col === 0 || col === 4)) return null;
+                    if (row === 1 && col === 0) return null;
+                    if (row === 1 && col === 4) return null;
+                    return <circle key={`${row}-${col}`} cx={cx} cy={cy} r="6.5" fill="#1F1F1F" />;
+                  })
+                )}
+                {/* Agujeros fila inferior (zona naranja/verde — más grandes, decorativos) */}
+                {[55, 83, 110, 137, 165].map((cx, i) => (
+                  <circle key={`low-${i}`} cx={cx} cy={222} r="5" fill="rgba(0,0,0,0.3)" />
+                ))}
+
+                {/* Logo placeholder (tupadel) */}
+                <text x="110" y="150" textAnchor="middle" fill="white" opacity="0.08" fontSize="22" fontFamily="serif" fontStyle="italic">tupadel</text>
+              </svg>
             </div>
           </div>
         </section>
@@ -107,10 +135,10 @@ export default function HomePage() {
         <section className="border-y border-line py-8 bg-canvas-warm">
           <div className="max-w-[1400px] mx-auto px-6 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { num: "847", label: "palas con review" },
-              { num: "312", label: "canchas indexadas" },
-              { num: "14", label: "ciudades en Chile" },
-              { num: "2.4K", label: "precios actualizados/día" },
+              { num: "12.8K", label: "jugadores diagnosticados" },
+              { num: "312", label: "canchas en Chile" },
+              { num: "847", label: "palas comparadas" },
+              { num: "14", label: "ciudades cubiertas" },
             ].map((s) => (
               <div key={s.label}>
                 <div className="stat-num text-4xl md:text-5xl">{s.num}</div>
@@ -123,14 +151,16 @@ export default function HomePage() {
         {/* Three pillars */}
         <section className="px-6 md:px-8 py-16 md:py-20 max-w-[1400px] mx-auto">
           <div className="mb-10">
-            <div className="mono text-xs text-ink-soft uppercase tracking-wider mb-2">→ Tres preguntas, una respuesta</div>
-            <h2 className="display text-3xl md:text-4xl font-semibold" style={{ letterSpacing: "-0.02em" }}>Lo que tupadel resuelve</h2>
+            <div className="mono text-xs text-ink-soft uppercase tracking-wider mb-2">→ El sistema completo</div>
+            <h2 className="display text-3xl md:text-4xl font-semibold text-balance" style={{ letterSpacing: "-0.02em" }}>
+              Todo lo que un jugador amateur necesita,<br className="hidden md:block" /> <span className="italic font-normal">en un solo lugar.</span>
+            </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { tag: "01 · ¿QUÉ PALA?", title: "Reviews honestas con precios reales", desc: "Comparamos cada pala en 6 tiendas. Histórico de 90 días, alertas de bajada, recomendador según tu juego.", href: "/palas" },
-              { tag: "02 · ¿DÓNDE JUGAR?", title: "Canchas con precios y disponibilidad", desc: "Directorio de clubes filtrable por comuna, indoor/outdoor, precio por franja horaria y reseñas reales.", href: "/canchas" },
-              { tag: "03 · ¿CÓMO MEJORAR?", title: "Ruta de aprendizaje según tu nivel", desc: "Diagnóstico de categoría 1–6 y plan personalizado: golpes, tácticas, drills semanales y profes en tu zona.", href: "/categorias" },
+              { tag: "01 · NIVEL Y MEJORA", title: "Sabé exactamente dónde estás", desc: "Diagnóstico de categoría Cat 1–6 basado en tu juego real. Tu ruta personalizada: qué golpes dominar, qué tácticas incorporar, qué drills hacer esta semana.", href: "/diagnostico" },
+              { tag: "02 · EQUIPO", title: "La pala correcta para tu juego", desc: "Reviews honestas comparadas en 6 tiendas. Recomendador según tu nivel y estilo. Histórico de precios, alertas de bajada, sin publicidad.", href: "/palas" },
+              { tag: "03 · CANCHAS Y COMUNIDAD", title: "Jugá más y mejor", desc: "Directorio de clubes con precios reales por franja. Encontrá compañero de tu nivel y zona. Todo lo que necesitás para armar punto.", href: "/canchas" },
             ].map((p) => (
               <Link key={p.tag} href={p.href} className="border border-line rounded-xl p-7 bg-canvas hover:border-[#00B85C] transition-colors group">
                 <div className="mono text-xs text-[#00B85C] mb-3">{p.tag}</div>
