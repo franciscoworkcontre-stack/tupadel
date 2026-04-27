@@ -9,6 +9,9 @@ export function VideoIntro() {
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
+    if (localStorage.getItem("tp_intro_seen")) {
+      setPhase("done");
+    }
   }, []);
 
   useEffect(() => {
@@ -23,12 +26,18 @@ export function VideoIntro() {
     });
 
     // When video ends (at ~15s), start fade
-    const handleEnded = () => setPhase("fading");
+    const handleEnded = () => {
+      localStorage.setItem("tp_intro_seen", "1");
+      setPhase("fading");
+    };
     video.addEventListener("ended", handleEnded);
 
     // Safety: if video stalls or is too long, cap at 10s of play
     const cap = setTimeout(() => {
-      if (phase === "intro") setPhase("fading");
+      if (phase === "intro") {
+        localStorage.setItem("tp_intro_seen", "1");
+        setPhase("fading");
+      }
     }, 10000);
 
     return () => {
@@ -66,7 +75,7 @@ export function VideoIntro() {
 
       {/* Skip button */}
       <button
-        onClick={() => setPhase("fading")}
+        onClick={() => { localStorage.setItem("tp_intro_seen", "1"); setPhase("fading"); }}
         className="absolute bottom-8 right-8 text-white/50 hover:text-white text-xs mono uppercase tracking-widest transition-colors"
       >
         Saltar →
