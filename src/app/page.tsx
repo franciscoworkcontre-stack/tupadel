@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
 import type { Metadata } from "next";
@@ -37,98 +38,61 @@ const topPalas = [
 export default function HomePage() {
   return (
     <>
-      <Navbar />
       <main>
-        {/* Hero */}
-        <section className="px-6 md:px-8 pt-16 md:pt-20 pb-20 md:pb-24 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-          <div className="md:col-span-7">
-            <div className="mono text-xs text-ink-soft uppercase tracking-widest mb-5 md:mb-6">
-              ↗ Todo lo que necesitás para jugar mejor
-            </div>
-            <h1 className="display text-5xl md:text-7xl font-semibold leading-[0.95] text-balance" style={{ letterSpacing: "-0.03em" }}>
-              Un lugar para
-              <br />
-              <span className="italic font-normal">todo</span> tu pádel.
-            </h1>
-            <p className="text-lg md:text-xl text-ink-muted mt-6 md:mt-8 max-w-xl leading-relaxed">
-              Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — todo en un solo lugar, para el jugador amateur de Chile y LATAM.
-            </p>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
-              <Link
-                href="/diagnostico"
-                className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
+        {/* Hero — dark full-bleed */}
+        <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-[#080808]">
+          <Navbar dark />
+          {/* Imagen de fondo */}
+          <Image
+            src="/hero-player.jpg"
+            alt="Jugador de pádel"
+            fill
+            priority
+            className="object-cover object-right-top"
+          />
+
+          {/* Gradiente izquierda: cubre el texto */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/85 to-[#080808]/20" />
+          {/* Gradiente inferior */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/70 via-transparent to-transparent" />
+
+          {/* Contenido */}
+          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-8 py-24 md:py-32">
+            <div className="max-w-2xl">
+              <div className="mono text-xs text-white/50 uppercase tracking-widest mb-5 md:mb-6">
+                ↗ Todo lo que necesitás para jugar mejor
+              </div>
+              <h1
+                className="display text-5xl md:text-7xl font-semibold leading-[0.93] text-white text-balance"
+                style={{ letterSpacing: "-0.03em" }}
               >
-                Descubrí tu nivel real <span>→</span>
-              </Link>
-              <span className="mono text-xs text-ink-soft">3 min · gratis · 12.847 jugadores</span>
+                Un lugar para
+                <br />
+                <span className="italic font-normal" style={{ color: "#00B85C" }}>todo</span> tu pádel.
+              </h1>
+              <p className="text-lg md:text-xl text-white/65 mt-6 md:mt-8 max-w-xl leading-relaxed">
+                Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — en un solo lugar, para el jugador amateur de Chile y LATAM.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
+                <Link
+                  href="/diagnostico"
+                  className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
+                >
+                  Descubrí tu nivel real <span>→</span>
+                </Link>
+                <Link
+                  href="/palas/recomendador"
+                  className="border border-white/30 text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:border-white/60 transition-colors backdrop-blur-sm"
+                >
+                  ¿Qué pala me conviene?
+                </Link>
+              </div>
+              <div className="mono text-xs text-white/35 mt-5">3 min · gratis · 12.847 jugadores</div>
             </div>
           </div>
 
-          {/* SVG Pala */}
-          <div className="md:col-span-5 flex items-center justify-center">
-            <div className="relative">
-              {/* Glow de fondo */}
-              <div className="absolute inset-0 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, #00B85C 0%, transparent 70%)", transform: "scale(1.4)" }} />
-              <svg
-                viewBox="0 0 220 380"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-48 md:w-64 relative drop-shadow-2xl"
-                aria-label="Pala de pádel"
-              >
-                {/* Sombra difusa */}
-                <ellipse cx="110" cy="370" rx="45" ry="8" fill="#0A0A0A" opacity="0.15" />
-
-                {/* Grip / Mango */}
-                <rect x="82" y="268" width="56" height="95" rx="14" fill="#1A1A1A" />
-                {/* Líneas del grip */}
-                {[280, 292, 304, 316, 328, 340].map(y => (
-                  <rect key={y} x="82" y={y} width="56" height="2.5" rx="1.25" fill="#2E2E2E" />
-                ))}
-                {/* Detalle inferior del grip */}
-                <rect x="82" y="350" width="56" height="13" rx="10" fill="#111" />
-
-                {/* Cuerpo de la pala - forma redondeada */}
-                <path
-                  d="M110 12 C60 12 22 52 22 110 L22 230 C22 258 64 278 110 278 C156 278 198 258 198 230 L198 110 C198 52 160 12 110 12Z"
-                  fill="#0A0A0A"
-                />
-
-                {/* Franja de color (verde) */}
-                <path
-                  d="M22 185 L198 185 L198 205 C198 205 198 210 180 212 L40 212 C22 210 22 205 22 205Z"
-                  fill="#00B85C"
-                  opacity="0.9"
-                />
-                {/* Segunda franja (naranja) más delgada */}
-                <path
-                  d="M22 178 L198 178 L198 185 L22 185Z"
-                  fill="#E8590C"
-                  opacity="0.7"
-                />
-
-                {/* Agujeros — grid 5 cols × 8 filas */}
-                {[...Array(8)].map((_, row) =>
-                  [...Array(5)].map((_, col) => {
-                    const cx = 55 + col * 28;
-                    const cy = 40 + row * 26;
-                    if (cy > 170) return null;
-                    if (row === 0 && (col === 0 || col === 4)) return null;
-                    if (row === 1 && col === 0) return null;
-                    if (row === 1 && col === 4) return null;
-                    return <circle key={`${row}-${col}`} cx={cx} cy={cy} r="6.5" fill="#1F1F1F" />;
-                  })
-                )}
-                {/* Agujeros fila inferior (zona naranja/verde — más grandes, decorativos) */}
-                {[55, 83, 110, 137, 165].map((cx, i) => (
-                  <circle key={`low-${i}`} cx={cx} cy={222} r="5" fill="rgba(0,0,0,0.3)" />
-                ))}
-
-                {/* Logo placeholder (tupadel) */}
-                <text x="110" y="150" textAnchor="middle" fill="white" opacity="0.08" fontSize="22" fontFamily="serif" fontStyle="italic">tupadel</text>
-              </svg>
-            </div>
-          </div>
+          {/* Borde inferior para transición suave al blanco */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-canvas to-transparent" />
         </section>
 
         {/* Stats */}
