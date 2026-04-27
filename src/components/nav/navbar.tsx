@@ -17,10 +17,10 @@ export function Navbar({ activeSection, dark }: { activeSection?: string; dark?:
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`px-6 md:px-8 py-3 md:py-4 flex items-center justify-between relative z-20 ${
+    <nav className={`px-6 md:px-8 py-3 md:py-4 flex items-center justify-between z-50 ${
       dark
-        ? "absolute top-0 left-0 right-0 bg-transparent border-b border-white/10"
-        : "border-b border-line bg-canvas"
+        ? "fixed top-0 left-0 right-0 bg-[#0D1B2A]/60 backdrop-blur-md border-b border-white/10"
+        : "relative border-b border-line bg-canvas"
     }`}>
       <div className="flex items-center gap-8 md:gap-10">
         <Link href="/">
