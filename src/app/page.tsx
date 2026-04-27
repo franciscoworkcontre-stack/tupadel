@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
+import { VideoIntro } from "@/components/video-intro";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -38,6 +39,8 @@ const topPalas = [
 export default function HomePage() {
   return (
     <>
+      <VideoIntro />
+
       {/* Navbar flota sobre el hero */}
       <Navbar dark />
 
