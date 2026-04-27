@@ -38,61 +38,62 @@ const topPalas = [
 export default function HomePage() {
   return (
     <>
+      {/* Navbar flota sobre el hero */}
+      <Navbar dark />
+
       <main>
         {/* Hero — dark full-bleed */}
-        <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-[#080808]">
-          <Navbar dark />
-          {/* Imagen de fondo */}
+        <section className="relative min-h-screen overflow-hidden bg-[#080808]">
+          {/* Imagen: player stays right, left naturally dark */}
           <Image
             src="/hero-player.jpg"
-            alt="Jugador de pádel"
+            alt="Jugador de pádel en acción"
             fill
             priority
-            className="object-cover object-right-top"
+            className="object-cover object-right"
           />
 
-          {/* Gradiente izquierda: cubre el texto */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/85 to-[#080808]/20" />
-          {/* Gradiente inferior */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/70 via-transparent to-transparent" />
+          {/* Gradiente izquierda — refuerza el área de texto */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/70 to-transparent" />
+          {/* Gradiente inferior — transición hacia el resto de la página */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/80 via-transparent to-transparent" />
 
-          {/* Contenido */}
-          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-8 py-24 md:py-32">
-            <div className="max-w-2xl">
-              <div className="mono text-xs text-white/50 uppercase tracking-widest mb-5 md:mb-6">
-                ↗ Todo lo que necesitás para jugar mejor
-              </div>
-              <h1
-                className="display text-5xl md:text-7xl font-semibold leading-[0.93] text-white text-balance"
-                style={{ letterSpacing: "-0.03em" }}
-              >
-                Un lugar para
-                <br />
-                <span className="italic font-normal" style={{ color: "#00B85C" }}>todo</span> tu pádel.
-              </h1>
-              <p className="text-lg md:text-xl text-white/65 mt-6 md:mt-8 max-w-xl leading-relaxed">
-                Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — en un solo lugar, para el jugador amateur de Chile y LATAM.
-              </p>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
-                <Link
-                  href="/diagnostico"
-                  className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
+          {/* Wrapper que centra verticalmente, con pt para clearear la navbar */}
+          <div className="relative z-10 flex items-center min-h-screen w-full">
+            <div className="w-full max-w-[1400px] mx-auto px-6 md:px-8 pt-20">
+              <div className="max-w-xl md:max-w-2xl">
+                <div className="mono text-xs text-white/50 uppercase tracking-widest mb-5 md:mb-6">
+                  ↗ Todo lo que necesitás para jugar mejor
+                </div>
+                <h1
+                  className="display text-5xl md:text-7xl font-semibold leading-[0.93] text-white text-balance"
+                  style={{ letterSpacing: "-0.03em" }}
                 >
-                  Descubrí tu nivel real <span>→</span>
-                </Link>
-                <Link
-                  href="/palas/recomendador"
-                  className="border border-white/30 text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:border-white/60 transition-colors backdrop-blur-sm"
-                >
-                  ¿Qué pala me conviene?
-                </Link>
+                  Un lugar para
+                  <br />
+                  <span className="italic font-normal" style={{ color: "#00B85C" }}>todo</span> tu pádel.
+                </h1>
+                <p className="text-lg md:text-xl text-white/65 mt-6 md:mt-8 max-w-xl leading-relaxed">
+                  Diagnóstico de nivel, ruta de mejora, comparador de palas, directorio de canchas y comunidad — en un solo lugar, para el jugador amateur de Chile y LATAM.
+                </p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8 md:mt-10">
+                  <Link
+                    href="/diagnostico"
+                    className="bg-[#00B85C] text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#008F47] transition-colors"
+                  >
+                    Descubrí tu nivel real <span>→</span>
+                  </Link>
+                  <Link
+                    href="/palas/recomendador"
+                    className="border border-white/30 text-white px-7 py-4 rounded-lg font-semibold flex items-center gap-2 hover:border-white/60 transition-colors"
+                  >
+                    ¿Qué pala me conviene?
+                  </Link>
+                </div>
+                <div className="mono text-xs text-white/35 mt-5">3 min · gratis · 12.847 jugadores</div>
               </div>
-              <div className="mono text-xs text-white/35 mt-5">3 min · gratis · 12.847 jugadores</div>
             </div>
           </div>
-
-          {/* Borde inferior para transición suave al blanco */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-canvas to-transparent" />
         </section>
 
         {/* Stats */}
