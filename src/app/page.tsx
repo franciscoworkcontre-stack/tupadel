@@ -1,8 +1,13 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
 import { VideoIntro } from "@/components/video-intro";
+import { db } from "@/db";
+import { palas, preciosPalas } from "@/db/schema";
+import { eq, desc, sql, and, isNotNull } from "drizzle-orm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,14 +34,53 @@ const categorias = [
   { num: 1, nombre: "Competitivo", resumen: "Ejecución bajo presión, estrategia por rival, mental game." },
 ];
 
-const topPalas = [
-  { slug: "bullpadel-vertex-04", marca: "Bullpadel", modelo: "Vertex 04", anio: 2025, forma: "Diamante", score: "8.4", precio: "$219.990", tiendas: 4, colorFrom: "from-[#DC2626]", pot: 9, ctrl: 6, sal: 7 },
-  { slug: "nox-at10-genius", marca: "Nox", modelo: "AT10 Genius", anio: 2025, forma: "Lágrima", score: "9.1", precio: "$254.990", variacion: "↓ 12%", colorFrom: "from-[#7DB81E]", pot: 8, ctrl: 8, sal: 8 },
-  { slug: "adidas-metalbone-hrd", marca: "Adidas", modelo: "Metalbone HRD+", anio: 2025, forma: "Redonda", score: "7.9", precio: "$184.990", tiendas: 6, colorFrom: "from-[#0891B2]", pot: 6, ctrl: 9, sal: 8 },
-  { slug: "head-delta-pro-2026", marca: "Head", modelo: "Delta Pro 2026", anio: 2025, forma: "Diamante", score: "8.7", precio: "$239.990", tiendas: 5, colorFrom: "from-[#E8590C]", pot: 9, ctrl: 7, sal: 7 },
-];
+const colorFromByMarca: Record<string, string> = {
+  Bullpadel: "from-[#DC2626]",
+  Nox: "from-[#7DB81E]",
+  Adidas: "from-[#0891B2]",
+  Head: "from-[#E8590C]",
+  Babolat: "from-[#DC2626]",
+  Siux: "from-[#7C3AED]",
+};
 
-export default function HomePage() {
+const formaLabel: Record<string, string> = {
+  diamante: "Diamante", lagrima: "Lágrima", redonda: "Redonda", hibrida: "Híbrida",
+};
+
+function formatPrice(n: number) {
+  return "$" + n.toLocaleString("es-CL");
+}
+
+export default async function HomePage() {
+  const topPalas = await db
+    .select({
+      id: palas.id,
+      slug: palas.slug,
+      marca: palas.marca,
+      modelo: palas.modelo,
+      anio: palas.anio,
+      forma: palas.forma,
+      scoreEditorial: palas.scoreEditorial,
+      imagenPrincipal: palas.imagenPrincipal,
+      perfilPotencia: palas.perfilPotencia,
+      perfilControl: palas.perfilControl,
+      perfilSalida: palas.perfilSalida,
+    })
+    .from(palas)
+    .where(and(eq(palas.publicada, true), isNotNull(palas.imagenPrincipal)))
+    .orderBy(desc(palas.scoreEditorial))
+    .limit(4);
+
+  const precios = await db
+    .select({
+      palaId: preciosPalas.palaId,
+      minPrecio: sql<number>`min(${preciosPalas.precioClp})`,
+    })
+    .from(preciosPalas)
+    .groupBy(preciosPalas.palaId);
+
+  const precioMap = Object.fromEntries(precios.map(p => [p.palaId, p.minPrecio]));
+
   return (
     <>
       <VideoIntro />
@@ -150,32 +194,49 @@ export default function HomePage() {
             <Link href="/palas" className="text-sm font-semibold hidden md:flex items-center gap-1">Ver todas →</Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-            {topPalas.map((p) => (
-              <Link key={p.slug} href={`/palas/${p.slug}`} className="border border-line rounded-xl overflow-hidden bg-canvas hover:border-ink-muted transition-colors">
-                <div className="aspect-[4/5] bg-gradient-to-br from-canvas-warm to-canvas-dim flex items-center justify-center relative">
-                  <div className={`w-24 md:w-32 h-36 md:h-44 bg-gradient-to-b ${p.colorFrom} to-ink rounded-[40%/30%] shadow-xl`} />
-                  <span className="absolute top-3 left-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] border border-line bg-canvas">{p.forma}</span>
-                  <span className="absolute top-3 right-3 mono text-xs font-semibold bg-ink text-white px-2 py-0.5 rounded">{p.score}</span>
-                </div>
-                <div className="p-4">
-                  <div className="mono text-[10px] text-ink-soft uppercase">{p.marca} · {p.anio}</div>
-                  <div className="display text-base md:text-lg font-semibold mt-1">{p.modelo}</div>
-                  <div className="mt-3 flex items-baseline justify-between">
-                    <span className="mono text-sm md:text-base font-semibold">{p.precio}</span>
-                    {p.variacion ? (
-                      <span className="mono text-xs text-[#E8590C]">{p.variacion}</span>
+            {topPalas.map((p) => {
+              const colorFrom = colorFromByMarca[p.marca] ?? "from-[#0D1B2A]";
+              const precio = precioMap[p.id];
+              return (
+                <Link key={p.slug} href={`/palas/${p.slug}`} className="border border-line rounded-xl overflow-hidden bg-canvas hover:border-ink-muted transition-colors">
+                  <div className="aspect-[4/5] bg-gradient-to-br from-canvas-warm to-canvas-dim flex items-center justify-center relative overflow-hidden">
+                    {p.imagenPrincipal ? (
+                      <Image
+                        src={p.imagenPrincipal}
+                        alt={`${p.marca} ${p.modelo}`}
+                        fill
+                        className="object-contain p-4"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
                     ) : (
-                      <span className="mono text-xs text-ink-soft">en {p.tiendas} tiendas</span>
+                      <div className={`w-24 md:w-32 h-36 md:h-44 bg-gradient-to-b ${colorFrom} to-ink rounded-[40%/30%] shadow-xl`} />
+                    )}
+                    <span className="absolute top-3 left-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] border border-line bg-canvas z-10">
+                      {formaLabel[p.forma ?? ""] ?? p.forma}
+                    </span>
+                    {p.scoreEditorial && (
+                      <span className="absolute top-3 right-3 mono text-xs font-semibold bg-ink text-white px-2 py-0.5 rounded z-10">
+                        {p.scoreEditorial.toFixed(1)}
+                      </span>
                     )}
                   </div>
-                  <div className="mt-3 grid grid-cols-3 gap-1 text-[10px]">
-                    <div className="text-center"><div className="text-ink-soft">POT</div><div className="font-semibold mono">{p.pot}</div></div>
-                    <div className="text-center"><div className="text-ink-soft">CTRL</div><div className="font-semibold mono">{p.ctrl}</div></div>
-                    <div className="text-center"><div className="text-ink-soft">SAL</div><div className="font-semibold mono">{p.sal}</div></div>
+                  <div className="p-4">
+                    <div className="mono text-[10px] text-ink-soft uppercase">{p.marca} · {p.anio}</div>
+                    <div className="display text-base md:text-lg font-semibold mt-1">{p.modelo}</div>
+                    {precio && (
+                      <div className="mt-3">
+                        <span className="mono text-sm md:text-base font-semibold">{formatPrice(precio)}</span>
+                      </div>
+                    )}
+                    <div className="mt-3 grid grid-cols-3 gap-1 text-[10px]">
+                      <div className="text-center"><div className="text-ink-soft">POT</div><div className="font-semibold mono">{p.perfilPotencia ?? "—"}</div></div>
+                      <div className="text-center"><div className="text-ink-soft">CTRL</div><div className="font-semibold mono">{p.perfilControl ?? "—"}</div></div>
+                      <div className="text-center"><div className="text-ink-soft">SAL</div><div className="font-semibold mono">{p.perfilSalida ?? "—"}</div></div>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </section>
 
