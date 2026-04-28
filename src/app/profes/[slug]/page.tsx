@@ -65,7 +65,12 @@ export default async function ProfeOCiudadPage({ params }: { params: Promise<{ s
   }
 
   // Si no → renderizar ficha del profe
-  const profe = await db.query.profes.findFirst({ where: eq(profes.slug, slug) });
+  let profe: Awaited<ReturnType<typeof db.query.profes.findFirst>> | null = null;
+  try {
+    profe = await db.query.profes.findFirst({ where: eq(profes.slug, slug) }) ?? null;
+  } catch {
+    // table may not exist yet
+  }
   if (!profe || profe.estado !== "activo") notFound();
   return <ProfePerfilPage profe={profe} />;
 }
@@ -74,10 +79,15 @@ export default async function ProfeOCiudadPage({ params }: { params: Promise<{ s
 // PÁGINA DE CIUDAD
 // ============================================================
 async function CiudadPage({ slug, cfg }: { slug: string; cfg: { label: string; pais: string; comunas: string[] } }) {
-  const listado = await db.query.profes.findMany({
-    where: (p, { eq: eqF, and: andF }) => andF(eqF(p.estado, "activo"), ilike(p.ciudad, cfg.label)),
-    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
-  });
+  let listado: Awaited<ReturnType<typeof db.query.profes.findMany>> = [];
+  try {
+    listado = await db.query.profes.findMany({
+      where: (p, { eq: eqF, and: andF }) => andF(eqF(p.estado, "activo"), ilike(p.ciudad, cfg.label)),
+      orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+    });
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>
