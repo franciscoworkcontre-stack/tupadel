@@ -10,7 +10,7 @@ import requests
 import psycopg2
 from difflib import SequenceMatcher
 
-DB_URL = "USE_ENV_VAR"
+DB_URL = os.environ.get("DATABASE_URL_UNPOOLED") or os.environ.get("DATABASE_URL")
 OUT_DIR = os.path.join(os.path.dirname(__file__), "../public/palas")
 os.makedirs(OUT_DIR, exist_ok=True)
 
