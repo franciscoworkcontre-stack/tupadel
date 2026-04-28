@@ -10,12 +10,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfesParaNinosPage() {
-  const todos = await db.query.profes.findMany({
-    where: (p, { eq: eqF }) => eqF(p.estado, "activo"),
-    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
-  });
-
-  const listado = todos.filter((p) => (p.especialidades ?? []).includes("ninos"));
+  let listado: Awaited<ReturnType<typeof db.query.profes.findMany>> = [];
+  try {
+    const todos = await db.query.profes.findMany({
+      where: (p, { eq: eqF }) => eqF(p.estado, "activo"),
+      orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+    });
+    listado = todos.filter((p) => (p.especialidades ?? []).includes("ninos"));
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>

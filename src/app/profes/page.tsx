@@ -31,18 +31,25 @@ const ciudades = [
   { slug: "montevideo", label: "Montevideo", pais: "🇺🇾" },
 ];
 
-export default async function ProfesPage() {
-  const featured = await db.query.profes.findMany({
-    where: (p, { eq, and }) => and(eq(p.estado, "activo"), eq(p.destacado, true)),
-    limit: 4,
-    orderBy: (p, { desc }) => [desc(p.ratingPromedio)],
-  });
+type Profe = Awaited<ReturnType<typeof db.query.profes.findMany>>[number];
 
-  const recientes = await db.query.profes.findMany({
-    where: (p, { eq }) => eq(p.estado, "activo"),
-    limit: 4,
-    orderBy: (p, { desc }) => [desc(p.publishedAt)],
-  });
+export default async function ProfesPage() {
+  let featured: Profe[] = [];
+  let recientes: Profe[] = [];
+  try {
+    featured = await db.query.profes.findMany({
+      where: (p, { eq, and }) => and(eq(p.estado, "activo"), eq(p.destacado, true)),
+      limit: 4,
+      orderBy: (p, { desc }) => [desc(p.ratingPromedio)],
+    });
+    recientes = await db.query.profes.findMany({
+      where: (p, { eq }) => eq(p.estado, "activo"),
+      limit: 4,
+      orderBy: (p, { desc }) => [desc(p.publishedAt)],
+    });
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>
@@ -228,8 +235,6 @@ export default async function ProfesPage() {
     </>
   );
 }
-
-type Profe = Awaited<ReturnType<typeof db.query.profes.findMany>>[number];
 
 function ProfeCard({ profe }: { profe: Profe }) {
   const precio = profe.precioIndividual60min;

@@ -247,11 +247,17 @@ export default async function CategoriaPage({ params }: { params: Promise<{ n: s
   const prioridadAlta = cat.golpesParaSubir.filter(g => g.prioridad === "alta");
   const prioridadMedia = cat.golpesParaSubir.filter(g => g.prioridad === "media");
 
-  const profesDelNivel = await db.query.profes.findMany({
-    where: (p, { eq }) => eq(p.estado, "activo"),
-    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
-    limit: 20,
-  }).then((all) => all.filter((p) => (p.categoriasQueEnsena ?? []).includes(cat.n)).slice(0, 3));
+  let profesDelNivel: Awaited<ReturnType<typeof db.query.profes.findMany>> = [];
+  try {
+    const allProfes = await db.query.profes.findMany({
+      where: (p, { eq }) => eq(p.estado, "activo"),
+      orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+      limit: 20,
+    });
+    profesDelNivel = allProfes.filter((p) => (p.categoriasQueEnsena ?? []).includes(cat.n)).slice(0, 3);
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>

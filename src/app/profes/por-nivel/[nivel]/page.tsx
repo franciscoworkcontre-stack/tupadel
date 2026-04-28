@@ -57,15 +57,18 @@ export default async function ProfesNivelPage({ params }: { params: Promise<{ ni
   const cfg = nivelConfig[nivel];
   if (!cfg) notFound();
 
-  const todos = await db.query.profes.findMany({
-    where: (p, { eq: eqF }) => eqF(p.estado, "activo"),
-    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
-  });
-
-  // Filtrar en JS porque arrayContains con múltiples valores requiere OR complejo
-  const listado = todos.filter((p) =>
-    (p.categoriasQueEnsena ?? []).some((c) => cfg.cats.includes(c))
-  );
+  let listado: Awaited<ReturnType<typeof db.query.profes.findMany>> = [];
+  try {
+    const todos = await db.query.profes.findMany({
+      where: (p, { eq: eqF }) => eqF(p.estado, "activo"),
+      orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+    });
+    listado = todos.filter((p) =>
+      (p.categoriasQueEnsena ?? []).some((c) => cfg.cats.includes(c))
+    );
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>

@@ -12,10 +12,15 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfesFemininasPage() {
-  const listado = await db.query.profes.findMany({
-    where: (p, { eq: eqF, and: andF }) => andF(eqF(p.estado, "activo"), eqF(p.genero, "mujer")),
-    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
-  });
+  let listado: Awaited<ReturnType<typeof db.query.profes.findMany>> = [];
+  try {
+    listado = await db.query.profes.findMany({
+      where: (p, { eq: eqF, and: andF }) => andF(eqF(p.estado, "activo"), eqF(p.genero, "mujer")),
+      orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+    });
+  } catch {
+    // table may not exist yet
+  }
 
   return (
     <>
