@@ -1,5 +1,6 @@
 import {
   pgTable,
+  pgEnum,
   text,
   integer,
   real,
@@ -9,6 +10,8 @@ import {
   uuid,
   varchar,
   decimal,
+  time,
+  date,
   index,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
@@ -700,4 +703,318 @@ export const retiroEdicionesRelations = relations(retiroEdiciones, ({ one, many 
   retiro: one(retiros, { fields: [retiroEdiciones.retiroId], references: [retiros.id] }),
   consultas: many(retiroConsultas),
   reservas: many(retiroReservas),
+}));
+
+// ============================================================
+// PROFES
+// ============================================================
+
+export const profeGeneroEnum = pgEnum("profe_genero", ["hombre", "mujer", "no_binario", "no_declarado"]);
+export const profeEstadoEnum = pgEnum("profe_estado", ["borrador", "pendiente_verificacion", "activo", "pausado", "suspendido"]);
+export const profePlanDestacadoEnum = pgEnum("profe_plan_destacado", ["basico", "pro", "elite"]);
+export const profeCancelacionEnum = pgEnum("profe_cancelacion", ["flexible_24h", "moderada_48h", "estricta_72h"]);
+export const profeDisponibilidadTipoEnum = pgEnum("profe_disponibilidad_tipo", ["regular", "excepcion"]);
+export const profeContactoViaEnum = pgEnum("profe_contacto_via", ["whatsapp", "email", "plataforma"]);
+export const profeReservaEstadoEnum = pgEnum("profe_reserva_estado", [
+  "consulta", "confirmada", "pagada", "completada",
+  "cancelada_alumno", "cancelada_profe", "no_show",
+]);
+
+export const profes = pgTable(
+  "profes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: varchar("slug", { length: 200 }).notNull().unique(),
+    userId: uuid("user_id").references(() => users.id),
+
+    // IDENTIDAD
+    nombre: varchar("nombre", { length: 200 }).notNull(),
+    apellido: varchar("apellido", { length: 200 }).notNull(),
+    genero: profeGeneroEnum("genero").notNull().default("no_declarado"),
+    fotoPrincipal: text("foto_principal"),
+    fotos: text("fotos").array().default([]),
+    videoPresentacionUrl: text("video_presentacion_url"),
+
+    // UBICACIÓN
+    ciudad: varchar("ciudad", { length: 100 }).notNull(),
+    comuna: varchar("comuna", { length: 100 }),
+    pais: varchar("pais", { length: 10 }).notNull().default("CL"),
+    lat: real("lat"),
+    lng: real("lng"),
+    radioDesplazamientoKm: integer("radio_desplazamiento_km").default(15),
+    clubesDondeDaClase: uuid("clubes_donde_da_clase").array().default([]),
+    atiendeOnline: boolean("atiende_online").default(false),
+
+    // PROFESIONAL
+    bioCorta: varchar("bio_corta", { length: 300 }),
+    bioMd: text("bio_md"),
+    anosExperiencia: integer("anos_experiencia").default(0),
+    exJugadorPro: boolean("ex_jugador_pro").default(false),
+    exJugadorProCircuito: varchar("ex_jugador_pro_circuito", { length: 100 }),
+    certificaciones: text("certificaciones").array().default([]),
+    idiomas: text("idiomas").array().default(["es"]),
+
+    // COMPETENCIA
+    categoriasQueEnsena: integer("categorias_que_ensena").array().default([]),
+    especialidades: text("especialidades").array().default([]),
+    modalidades: text("modalidades").array().default([]),
+
+    // PRECIOS (CLP)
+    precioIndividual60min: integer("precio_individual_60min"),
+    precioIndividual90min: integer("precio_individual_90min"),
+    precioPareja60min: integer("precio_pareja_60min"),
+    precioGrupo60min: integer("precio_grupo_60min"),
+    precioClinica60min: integer("precio_clinica_60min"),
+    precioVideoAnalisis: integer("precio_video_analisis"),
+    monedaBase: varchar("moneda_base", { length: 5 }).default("CLP"),
+    permitePaquetes: boolean("permite_paquetes").default(false),
+    descuentoPaquete10Pct: integer("descuento_paquete_10_pct"),
+
+    // PERFIL EDITORIAL
+    sobreMiMd: text("sobre_mi_md"),
+    metodologiaMd: text("metodologia_md"),
+
+    // CONTACTO
+    whatsapp: varchar("whatsapp", { length: 30 }),
+    email: varchar("email", { length: 300 }),
+    instagram: varchar("instagram", { length: 100 }),
+    telefonoVisible: boolean("telefono_visible").default(false),
+
+    // BOOKING
+    aceptaBookingIntegrado: boolean("acepta_booking_integrado").default(false),
+    comisionPct: integer("comision_pct").default(10),
+    stripeAccountId: varchar("stripe_account_id", { length: 200 }),
+    anticipacionMinimaHoras: integer("anticipacion_minima_horas").default(24),
+    cancelacionPolitica: profeCancelacionEnum("cancelacion_politica").default("moderada_48h"),
+
+    // VERIFICACIÓN
+    verificado: boolean("verificado").default(false),
+    verificadoAt: timestamp("verificado_at"),
+    verificadoByAdminId: uuid("verificado_by_admin_id"),
+    documentoVerificacionUrl: text("documento_verificacion_url"),
+    certificacionVerificada: boolean("certificacion_verificada").default(false),
+
+    // FLAGS COMERCIALES
+    destacado: boolean("destacado").default(false),
+    destacadoHasta: date("destacado_hasta"),
+    planDestacado: profePlanDestacadoEnum("plan_destacado"),
+    nuevo: boolean("nuevo").default(true),
+
+    // ESTADO
+    estado: profeEstadoEnum("estado").notNull().default("borrador"),
+
+    // STATS
+    ratingPromedio: real("rating_promedio"),
+    reviewsCount: integer("reviews_count").default(0),
+    clasesDadasCount: integer("clases_dadas_count").default(0),
+    alumnosRecurrentesCount: integer("alumnos_recurrentes_count").default(0),
+    respuestaPromedioHoras: real("respuesta_promedio_horas"),
+
+    // SEO
+    metaTitulo: varchar("meta_titulo", { length: 200 }),
+    metaDescripcion: varchar("meta_descripcion", { length: 300 }),
+
+    createdAt: timestamp("created_at").defaultNow(),
+    publishedAt: timestamp("published_at"),
+    lastActiveAt: timestamp("last_active_at"),
+  },
+  (t) => [
+    index("profes_ciudad_idx").on(t.ciudad),
+    index("profes_estado_idx").on(t.estado),
+    index("profes_destacado_idx").on(t.destacado),
+  ]
+);
+
+export const profeDisponibilidad = pgTable(
+  "profe_disponibilidad",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    diaSemana: integer("dia_semana").notNull(), // 0=dom...6=sab
+    horaInicio: time("hora_inicio").notNull(),
+    horaFin: time("hora_fin").notNull(),
+    vigentaDesde: date("vigente_desde"),
+    vigentaHasta: date("vigente_hasta"),
+    tipo: profeDisponibilidadTipoEnum("tipo").notNull().default("regular"),
+    activo: boolean("activo").default(true),
+  },
+  (t) => [index("profe_disp_profe_idx").on(t.profeId)]
+);
+
+export const profeBloqueos = pgTable(
+  "profe_bloqueos",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    fechaInicio: timestamp("fecha_inicio").notNull(),
+    fechaFin: timestamp("fecha_fin").notNull(),
+    motivo: varchar("motivo", { length: 200 }),
+  },
+  (t) => [index("profe_bloqueos_profe_idx").on(t.profeId)]
+);
+
+export const profeConsultas = pgTable(
+  "profe_consultas",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").references(() => users.id),
+    email: varchar("email", { length: 300 }).notNull(),
+    nombre: varchar("nombre", { length: 200 }).notNull(),
+    telefono: varchar("telefono", { length: 30 }),
+    categoriaAlumno: integer("categoria_alumno"),
+    modalidadSolicitada: varchar("modalidad_solicitada", { length: 50 }),
+    mensaje: text("mensaje").notNull(),
+    respondida: boolean("respondida").default(false),
+    respondidaAt: timestamp("respondida_at"),
+    contactoVia: profeContactoViaEnum("contacto_via").default("plataforma"),
+    reviewSolicitadaAt: timestamp("review_solicitada_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("profe_consultas_profe_idx").on(t.profeId),
+    index("profe_consultas_user_idx").on(t.userId),
+  ]
+);
+
+export const profeReservas = pgTable(
+  "profe_reservas",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").references(() => users.id),
+    consultaId: uuid("consulta_id").references(() => profeConsultas.id),
+    fechaClase: timestamp("fecha_clase").notNull(),
+    duracionMin: integer("duracion_min").notNull().default(60),
+    modalidad: varchar("modalidad", { length: 50 }),
+    lugar: varchar("lugar", { length: 300 }),
+    clubId: uuid("club_id").references(() => clubes.id),
+    cantidadAlumnos: integer("cantidad_alumnos").default(1),
+    attendeesJson: jsonb("attendees_json"),
+    montoSubtotal: integer("monto_subtotal"),
+    montoComision: integer("monto_comision"),
+    montoTotal: integer("monto_total"),
+    moneda: varchar("moneda", { length: 5 }).default("CLP"),
+    stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 200 }),
+    estado: profeReservaEstadoEnum("estado").notNull().default("consulta"),
+    canceladaAt: timestamp("cancelada_at"),
+    motivoCancelacion: text("motivo_cancelacion"),
+    notasAlumno: text("notas_alumno"),
+    notasProfePostClase: text("notas_profe_post_clase"),
+    createdAt: timestamp("created_at").defaultNow(),
+    completadaAt: timestamp("completada_at"),
+  },
+  (t) => [
+    index("profe_reservas_profe_idx").on(t.profeId),
+    index("profe_reservas_user_idx").on(t.userId),
+    index("profe_reservas_fecha_idx").on(t.fechaClase),
+  ]
+);
+
+export const profeMensajes = pgTable(
+  "profe_mensajes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    reservaId: uuid("reserva_id").notNull().references(() => profeReservas.id, { onDelete: "cascade" }),
+    autorUserId: uuid("autor_user_id").references(() => users.id),
+    contenido: text("contenido").notNull(),
+    leidoAt: timestamp("leido_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [index("profe_mensajes_reserva_idx").on(t.reservaId)]
+);
+
+export const profeAlumnoRelacion = pgTable(
+  "profe_alumno_relacion",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    categoriaInicial: integer("categoria_inicial"),
+    categoriaActual: integer("categoria_actual"),
+    primeraClaseFecha: timestamp("primera_clase_fecha"),
+    ultimaClaseFecha: timestamp("ultima_clase_fecha"),
+    totalClases: integer("total_clases").default(0),
+    objetivoActualMd: text("objetivo_actual_md"),
+    notasMd: text("notas_md"),
+    activo: boolean("activo").default(true),
+  },
+  (t) => [
+    uniqueIndex("profe_alumno_unique_idx").on(t.profeId, t.userId),
+    index("profe_alumno_profe_idx").on(t.profeId),
+  ]
+);
+
+export const profeReviews = pgTable(
+  "profe_reviews",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").notNull().references(() => users.id),
+    reservaId: uuid("reserva_id").references(() => profeReservas.id),
+    rating: integer("rating").notNull(), // 1-5
+    ratingTecnica: integer("rating_tecnica"),
+    ratingComunicacion: integer("rating_comunicacion"),
+    ratingPuntualidad: integer("rating_puntualidad"),
+    ratingRelacionCalidadPrecio: integer("rating_relacion_calidad_precio"),
+    titulo: varchar("titulo", { length: 200 }),
+    comentario: text("comentario"),
+    clasesTomadas: integer("clases_tomadas").default(1),
+    respondidaPorProfeMd: text("respondida_por_profe_md"),
+    aprobada: boolean("aprobada").default(false),
+    publicadoAt: timestamp("publicado_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("profe_reviews_profe_idx").on(t.profeId),
+    uniqueIndex("profe_reviews_user_reserva_idx").on(t.userId, t.reservaId),
+  ]
+);
+
+export const certificacionesCatalogo = pgTable("certificaciones_catalogo", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  nombre: varchar("nombre", { length: 200 }).notNull(),
+  organismo: varchar("organismo", { length: 200 }),
+  pais: varchar("pais", { length: 10 }),
+  pesoCredibilidad: integer("peso_credibilidad").default(50), // 0-100
+});
+
+export const profeGuardados = pgTable(
+  "profe_guardados",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    profeId: uuid("profe_id").notNull().references(() => profes.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [uniqueIndex("profe_guardados_unique_idx").on(t.userId, t.profeId)]
+);
+
+// Relations profes
+export const profesRelations = relations(profes, ({ one, many }) => ({
+  user: one(users, { fields: [profes.userId], references: [users.id] }),
+  disponibilidad: many(profeDisponibilidad),
+  bloqueos: many(profeBloqueos),
+  consultas: many(profeConsultas),
+  reservas: many(profeReservas),
+  alumnos: many(profeAlumnoRelacion),
+  reviews: many(profeReviews),
+  guardados: many(profeGuardados),
+}));
+
+export const profeReservasRelations = relations(profeReservas, ({ one, many }) => ({
+  profe: one(profes, { fields: [profeReservas.profeId], references: [profes.id] }),
+  user: one(users, { fields: [profeReservas.userId], references: [users.id] }),
+  mensajes: many(profeMensajes),
+}));
+
+export const profeConsultasRelations = relations(profeConsultas, ({ one }) => ({
+  profe: one(profes, { fields: [profeConsultas.profeId], references: [profes.id] }),
+  user: one(users, { fields: [profeConsultas.userId], references: [users.id] }),
+}));
+
+export const profeAlumnoRelacionRelations = relations(profeAlumnoRelacion, ({ one }) => ({
+  profe: one(profes, { fields: [profeAlumnoRelacion.profeId], references: [profes.id] }),
+  user: one(users, { fields: [profeAlumnoRelacion.userId], references: [users.id] }),
 }));

@@ -3,6 +3,7 @@ import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { db } from "@/db";
 
 type Cat = {
   n: number;
@@ -228,8 +229,9 @@ export function generateStaticParams() {
   return [1, 2, 3, 4, 5, 6].map(n => ({ n: String(n) }));
 }
 
-export function generateMetadata({ params }: { params: { n: string } }): Metadata {
-  const cat = cats[Number(params.n)];
+export async function generateMetadata({ params }: { params: Promise<{ n: string }> }): Promise<Metadata> {
+  const { n } = await params;
+  const cat = cats[Number(n)];
   if (!cat) return {};
   return {
     title: `Categoría ${cat.n} — ${cat.nombre} en Pádel | Pulso Pádel`,
@@ -237,12 +239,19 @@ export function generateMetadata({ params }: { params: { n: string } }): Metadat
   };
 }
 
-export default function CategoriaPage({ params }: { params: { n: string } }) {
-  const cat = cats[Number(params.n)];
+export default async function CategoriaPage({ params }: { params: Promise<{ n: string }> }) {
+  const { n } = await params;
+  const cat = cats[Number(n)];
   if (!cat) notFound();
 
   const prioridadAlta = cat.golpesParaSubir.filter(g => g.prioridad === "alta");
   const prioridadMedia = cat.golpesParaSubir.filter(g => g.prioridad === "media");
+
+  const profesDelNivel = await db.query.profes.findMany({
+    where: (p, { eq }) => eq(p.estado, "activo"),
+    orderBy: (p, { desc }) => [desc(p.destacado), desc(p.ratingPromedio)],
+    limit: 20,
+  }).then((all) => all.filter((p) => (p.categoriasQueEnsena ?? []).includes(cat.n)).slice(0, 3));
 
   return (
     <>
@@ -402,6 +411,43 @@ export default function CategoriaPage({ params }: { params: { n: string } }) {
 
           {/* Navegación */}
           <section className="flex items-center justify-between pt-4 border-t border-line">
+            {/* Profes para este nivel */}
+            {profesDelNivel.length > 0 && (
+              <div className="col-span-full mb-8">
+                <div className="flex items-baseline justify-between mb-4">
+                  <div>
+                    <div className="mono text-xs text-ink-soft uppercase tracking-widest mb-1">→ Profes recomendados</div>
+                    <h2 className="display text-2xl font-semibold" style={{ letterSpacing: "-0.02em" }}>
+                      Profes que trabajan Cat {cat.n}
+                    </h2>
+                  </div>
+                  <Link href={`/profes/por-nivel/${cat.n <= 2 ? "avanzado" : cat.n === 3 ? "avanzado" : cat.n === 4 ? "intermedio" : "iniciacion"}`} className="mono text-xs text-ink-soft hover:text-ink transition-colors">
+                    Ver todos →
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {profesDelNivel.map((p) => (
+                    <Link key={p.id} href={`/profes/${p.slug}`} className="border border-line rounded-xl p-5 bg-canvas hover:border-ink-muted transition-colors">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-full bg-[#0D1B2A] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                          {p.nombre[0]}{p.apellido[0]}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-sm">{p.nombre} {p.apellido}</div>
+                          <div className="text-xs text-ink-muted">{p.ciudad}</div>
+                        </div>
+                        {p.verificado && <span className="ml-auto mono text-[9px] bg-[#A8E63A]/10 text-[#65A30D] border border-[#A8E63A]/30 px-1.5 py-0.5 rounded">✓</span>}
+                      </div>
+                      <p className="text-xs text-ink-muted line-clamp-2 leading-relaxed">{p.bioCorta}</p>
+                      {p.ratingPromedio && (
+                        <div className="mt-3 text-xs"><span className="text-yellow-500">★</span> <span className="font-semibold">{p.ratingPromedio.toFixed(1)}</span> <span className="text-ink-muted">({p.reviewsCount})</span></div>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {cat.anterior ? (
               <Link href={`/categorias/${cat.anterior}`} className="text-sm text-ink-muted hover:text-ink transition-colors">
                 ← Cat {cat.anterior} — {cats[cat.anterior].nombre}
