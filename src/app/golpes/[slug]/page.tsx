@@ -271,7 +271,7 @@ export default function GolpePage({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      <Navbar activeSection="/golpes" />
+      <Navbar activeSection="/aprender" />
       <main>
         {/* Hero */}
         <section className="px-6 md:px-8 py-10 md:py-14 border-b border-line" style={{ background: `linear-gradient(135deg, ${color}12 0%, transparent 60%)` }}>

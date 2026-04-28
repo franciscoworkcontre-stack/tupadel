@@ -9,7 +9,7 @@ const links = [
   { href: "/palas", label: "Palas" },
   { href: "/retiros", label: "Retiros" },
   { href: "/canchas", label: "Canchas" },
-  { href: "/golpes", label: "Aprender" },
+  { href: "/aprender", label: "Aprender" },
   { href: "/torneos", label: "Torneos" },
   { href: "/comunidad/buscar-companero", label: "Comunidad" },
 ];

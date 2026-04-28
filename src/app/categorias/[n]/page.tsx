@@ -1,278 +1,422 @@
+import Link from "next/link";
 import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/nav/footer";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-const catData = {
-  1: {
-    nombre: "Competitivo",
-    color: "#DC2626",
-    bg: "bg-[#DC2626]",
-    pct: "~5%",
-    tiempo: "Indefinido",
-    frecuencia: "5+ veces/sem",
-    domina: [
-      { golpe: "Ejecución técnica completa", desc: "Todos los golpes con variación bajo presión." },
-      { golpe: "Lectura anticipatoria", desc: "Anticipa intención antes de que el rival golpee." },
-      { golpe: "Smash definitivo", desc: "X3 y X4 fiables en situación de partido." },
-      { golpe: "Defensa de alta intensidad", desc: "Mantiene nivel técnico en tercer set." },
+type Cat = {
+  n: number;
+  nombre: string;
+  color: string;
+  pct: string;
+  descripcion: string;
+  tiempoPromedio: string;
+  frecuencia: string;
+  golpesDomina: { nombre: string; slug: string; desc: string }[];
+  golpesParaSubir: { nombre: string; slug: string; desc: string; prioridad: "alta" | "media" }[];
+  tacticasClave: string[];
+  erroresComunes: string[];
+  palaRecomendada: { forma: string; nivel: string; ejemplos: string[] };
+  siguiente?: number;
+  anterior?: number;
+};
+
+const cats: Record<number, Cat> = {
+  6: {
+    n: 6, nombre: "Iniciación", color: "#7C3AED", pct: "~18%",
+    tiempoPromedio: "0–6 meses", frecuencia: "1–2 veces por semana",
+    descripcion: "El inicio de todo. En Cat 6 estás aprendiendo las mecánicas básicas: cómo agarrar la pala, posicionarte en cancha y hacer contacto consistente. Los golpes son simples pero hay que ejecutarlos bien desde el principio para no adquirir vicios.",
+    golpesDomina: [
+      { nombre: "Drive básico", slug: "drive", desc: "Golpe de derecha de fondo de cancha. El golpe más básico del pádel." },
+      { nombre: "Revés básico", slug: "reves", desc: "Golpe de revés desde el fondo. Muchos empiezan con dos manos." },
+      { nombre: "Saque", slug: "saque", desc: "El saque en pádel se ejecuta por debajo de la cintura, diferente al tenis." },
     ],
-    faltan: [
-      { golpe: "Estrategia por rival", desc: "Adaptar plan de juego según debilidades del oponente.", prio: 1 },
-      { golpe: "Mental game", desc: "Gestión de presión en puntos decisivos.", prio: 1 },
-      { golpe: "Preparación física específica", desc: "Trabajo físico orientado al pádel.", prio: 2 },
+    golpesParaSubir: [
+      { nombre: "Globo", slug: "globo", desc: "El primer golpe defensivo real. Sin globo no hay pádel — es la herramienta que da tiempo para reorganizarse.", prioridad: "alta" },
+      { nombre: "Volea básica", slug: "volea", desc: "Golpear en el aire en la red. Fundamental para empezar a jugar en posición de ataque.", prioridad: "alta" },
+      { nombre: "Contrapared", slug: "contrapared", desc: "Saber usar la pared lateral para no perder puntos cuando la pelota va al costado.", prioridad: "media" },
     ],
-  },
-  2: {
-    nombre: "Avanzado",
-    color: "#EA580C",
-    bg: "bg-[#EA580C]",
-    pct: "~10%",
-    tiempo: "12–36 meses en Cat 3",
-    frecuencia: "4+ veces/sem",
-    domina: [
-      { golpe: "Víbora consistente", desc: "Con control de dirección y efecto." },
-      { golpe: "X3 básico", desc: "Sale de cancha en situaciones favorables." },
-      { golpe: "Variación de ritmo", desc: "Sabe cuándo acelerar y cuándo controlar." },
-      { golpe: "Chiquita y dejada", desc: "Las incorpora con consistencia en la red." },
-      { golpe: "Contrapared ofensiva", desc: "Usa la pared lateral como arma." },
+    tacticasClave: [
+      "Siempre intentar llegar a la red después de un buen golpe de fondo",
+      "En duda, globo. Nunca meter en la red por querer atacar",
+      "Comunicarse con la pareja: ¿mío o tuyo?",
     ],
-    faltan: [
-      { golpe: "Remate definitivo", desc: "Cerrar puntos con smash en situación de ventaja.", prio: 1 },
-      { golpe: "Presión sistemática en red", desc: "Sostener presión durante rallies largos.", prio: 1 },
-      { golpe: "Contraataque organizado", desc: "Respuesta táctica ante equipos que presionan.", prio: 2 },
+    erroresComunes: [
+      "Agarrar la pala demasiado fuerte — mata el tacto y cansa el brazo",
+      "Mirar la pala en lugar de la pelota en el momento del contacto",
+      "Quedarse siempre en el fondo de la cancha",
+      "Intentar remates que aún no se pueden ejecutar",
+      "No rotar con la pareja",
     ],
-  },
-  3: {
-    nombre: "Intermedio alto",
-    color: "#D97706",
-    bg: "bg-[#D97706]",
-    pct: "~15%",
-    tiempo: "12–24 meses en Cat 4",
-    frecuencia: "3–4 veces/sem",
-    domina: [
-      { golpe: "Víbora con dirección", desc: "Cruzada o paralela según posición del rival." },
-      { golpe: "Globo táctico al revés", desc: "Para ganar la red en el momento justo." },
-      { golpe: "Bajada de tres metros", desc: "Control en pelotas difíciles sobre la cabeza." },
-      { golpe: "Contrapared básica", desc: "Sale de la situación sin perder posición." },
-      { golpe: "Comunicación eficaz", desc: "Pareja sincronizada en subidas y bajadas." },
-    ],
-    faltan: [
-      { golpe: "X3 y X4", desc: "Remates que salen de la cancha en situaciones favorables.", prio: 1 },
-      { golpe: "Dejada tras globo", desc: "Aprovechar la subida a red con dejada al cuerpo.", prio: 1 },
-      { golpe: "Chiquita", desc: "Golpe corto con efecto para abrir huecos en red.", prio: 2 },
-      { golpe: "Anticipación", desc: "Leer el golpe del rival antes de que lo ejecute.", prio: 2 },
-      { golpe: "Variación de ritmo", desc: "Saber cuándo acelerar y cuándo frenar el punto.", prio: 3 },
-      { golpe: "Australiana básica", desc: "Formación en el saque para presionar desde el inicio.", prio: 3 },
-    ],
-  },
-  4: {
-    nombre: "Intermedio",
-    color: "#65A30D",
-    bg: "bg-[#65A30D]",
-    pct: "~24%",
-    tiempo: "8–18 meses",
-    frecuencia: "2–3 veces/sem",
-    domina: [
-      { golpe: "Drive y revés con bote consistentes", desc: "Profundidad y altura controladas, pocos errores no forzados." },
-      { golpe: "Salida de pared en ambos lados", desc: "Drive y revés tras pared sin perder altura ni dirección." },
-      { golpe: "Bandeja con dirección", desc: "Cruzada o paralela, profunda al fondo, sin cortarte el codo." },
-      { golpe: "Globo defensivo bajo presión", desc: "Con altura suficiente para volver a posición." },
-      { golpe: "Smash plano simple", desc: "En pelotas que no salen de cancha, sin pretender x3." },
-      { golpe: "Comunicación básica con la pareja", desc: "\"Mía\", \"tuya\", subir y bajar juntos, dividir cancha." },
-    ],
-    faltan: [
-      { golpe: "Víbora", desc: "Variación de bandeja con efecto cortado y dirección al cuerpo.", prio: 1 },
-      { golpe: "Globo táctico", desc: "Al revés del rival, profundo, para ganar la red.", prio: 1 },
-      { golpe: "Bajada de tres metros", desc: "Devolver pelotas altas con control sin levantar globo.", prio: 2 },
-      { golpe: "Contrapared ofensiva", desc: "Usar la pared lateral como ofensa, no solo defensa.", prio: 2 },
-      { golpe: "Lectura de altura", desc: "Decidir subir o quedarse según altura del bote en pared.", prio: 3 },
-      { golpe: "Smash por tres (x3) básico", desc: "Sacar pelota por arriba del muro lateral en remates altos.", prio: 3 },
-    ],
+    palaRecomendada: {
+      forma: "Redonda",
+      nivel: "Iniciación — núcleo EVA blando, sin carbono",
+      ejemplos: ["Bullpadel Neuron", "Nox X-ONE", "Head Alpha Pro", "Babolat Counter Veron"],
+    },
+    siguiente: 5,
   },
   5: {
-    nombre: "Intermedio bajo",
-    color: "#0891B2",
-    bg: "bg-[#0891B2]",
-    pct: "~28%",
-    tiempo: "6–12 meses",
-    frecuencia: "1–2 veces/sem",
-    domina: [
-      { golpe: "Drive y revés con bote", desc: "Los mete en cancha con altura y dirección básicas." },
-      { golpe: "Posición de espera", desc: "Sabe dónde pararse y cuándo moverse." },
-      { golpe: "Bandeja básica defensiva", desc: "Sin dirección definida pero en cancha." },
-      { golpe: "Salida de pared sin presión", desc: "Puede salir cuando la bola es cómoda." },
+    n: 5, nombre: "Intermedio bajo", color: "#0891B2", pct: "~28%",
+    tiempoPromedio: "6–18 meses", frecuencia: "2 veces por semana",
+    descripcion: "El nivel más común en Chile. En Cat 5 ya sabés jugar: tenés drives y reveses, entrás a la red y conocés las reglas. Pero falta consistencia y las salidas de pared aún cuestan. La bandeja es la llave para pasar a Cat 4.",
+    golpesDomina: [
+      { nombre: "Drive consistente", slug: "drive", desc: "Drive de fondo que no falla en el 80% de los casos." },
+      { nombre: "Revés de fondo", slug: "reves", desc: "Revés cruzado y paralelo con dirección." },
+      { nombre: "Globo defensivo", slug: "globo", desc: "Globo que sube y llega al fondo del rival." },
+      { nombre: "Volea básica", slug: "volea", desc: "Volea de control en red, sin remate." },
+      { nombre: "Salida de pared lateral", slug: "salida-de-pared", desc: "Salir de la pared del lateral sin perder el punto." },
     ],
-    faltan: [
-      { golpe: "Bandeja con dirección", desc: "Cruzada o paralela, profunda, con intención.", prio: 1 },
-      { golpe: "Globo defensivo", desc: "Que llegue al fondo con altura suficiente.", prio: 1 },
-      { golpe: "Salida de pared con cambio de altura", desc: "Adaptarse cuando la pared la devuelve diferente.", prio: 2 },
-      { golpe: "Smash plano simple", desc: "En pelotas fáciles dentro de cancha.", prio: 2 },
-      { golpe: "Comunicación con la pareja", desc: "\"Mía\", \"tuya\", subir y bajar coordinados.", prio: 3 },
+    golpesParaSubir: [
+      { nombre: "Bandeja", slug: "bandeja", desc: "La bandeja con dirección es el golpe que define el salto Cat 5 → Cat 4. Sin bandeja no se puede mantener la red.", prioridad: "alta" },
+      { nombre: "Remate", slug: "remate", desc: "Rematar pelotas altas en cancha. No tiene que ser perfecto, solo consistente.", prioridad: "alta" },
+      { nombre: "Contrapared completa", slug: "contrapared", desc: "Usar la pared lateral para crear ángulos, no solo para sacar la pelota.", prioridad: "media" },
     ],
+    tacticasClave: [
+      "Atacar siempre al revés del rival — es el lado más débil en Cat 5",
+      "En red, cubrir el pasillo: no dejar espacio entre los dos jugadores",
+      "Después de defender con globo, avanzar a la red inmediatamente",
+    ],
+    erroresComunes: [
+      "Remate fuera de tiempo — pelota detrás del cuerpo",
+      "Bandeja sin dirección, al centro, sin ángulo",
+      "Quedarse en el fondo después de defender",
+      "No comunicarse cuando el globo va al centro",
+      "Intentar la víbora antes de dominar la bandeja",
+    ],
+    palaRecomendada: {
+      forma: "Redonda o lágrima",
+      nivel: "Intermedio — EVA media densidad, fibra reforzada o carbono básico",
+      ejemplos: ["Bullpadel Hack 04", "Nox ML10 Pro Cup", "Head Speed Motion", "Babolat Technical Veron"],
+    },
+    siguiente: 4,
+    anterior: 6,
   },
-  6: {
-    nombre: "Iniciación",
-    color: "#7C3AED",
-    bg: "bg-[#7C3AED]",
-    pct: "~18%",
-    tiempo: "Primeros 6–12 meses",
-    frecuencia: "1 vez/sem o más",
-    domina: [
-      { golpe: "Regla básica del pádel", desc: "Entiende cómo se juega, el saque, los puntos, las paredes." },
-      { golpe: "Agarre y postura básica", desc: "Sostiene la pala correctamente, posición de espera básica." },
+  4: {
+    n: 4, nombre: "Intermedio", color: "#65A30D", pct: "~24%",
+    tiempoPromedio: "18 meses–3 años", frecuencia: "2–3 veces por semana",
+    descripcion: "En Cat 4 sos un jugador completo en lo básico: tenés bandeja, globo táctico y sabés moverte en cancha. La diferencia con Cat 3 está en la víbora, las bajadas de pared y crear situaciones de ataque de forma sistemática.",
+    golpesDomina: [
+      { nombre: "Bandeja", slug: "bandeja", desc: "Bandeja con dirección cruzada y paralela." },
+      { nombre: "Remate", slug: "remate", desc: "Remate consistente en posición favorable." },
+      { nombre: "Globo táctico", slug: "globo", desc: "Globo usado para recuperar la red, no solo para defender." },
+      { nombre: "Contrapared", slug: "contrapared", desc: "Contrapared lateral con dirección." },
+      { nombre: "Salida de pared", slug: "salida-de-pared", desc: "Salida de pared trasera con control." },
+      { nombre: "Volea de control", slug: "volea", desc: "Volea baja que no da ángulo al rival." },
     ],
-    faltan: [
-      { golpe: "Drive y revés con bote consistentes", desc: "Meter en cancha con altura suficiente.", prio: 1 },
-      { golpe: "Posición de espera", desc: "Saber dónde pararse y cuándo moverse.", prio: 1 },
-      { golpe: "Bandeja básica defensiva", desc: "Salida de globo o defensiva cuando la pelota es alta.", prio: 2 },
-      { golpe: "Salida de pared simple", desc: "No asustarse con las paredes, saber esperar la bola.", prio: 2 },
-      { golpe: "Regla de subir/bajar juntos", desc: "Moverse coordinado con la pareja, no dejar espacios.", prio: 3 },
+    golpesParaSubir: [
+      { nombre: "Víbora", slug: "vibora", desc: "La víbora es el golpe que define Cat 3. Cambia completamente la dinámica del juego en red.", prioridad: "alta" },
+      { nombre: "Dejada", slug: "dejada", desc: "La dejada cuando el rival está en posición desfavorable. Crea oportunidades imposibles de cubrir.", prioridad: "alta" },
+      { nombre: "X3 (por tres)", slug: "x3", desc: "El remate que sale por el lateral. Punto definitivo cuando se domina.", prioridad: "media" },
     ],
+    tacticasClave: [
+      "Presión sistemática: dos en red, globos respondidos con bandeja + cerrar",
+      "Bajada de pared: usar la contrapared rival para hacer el punto",
+      "Cambio de ritmo: no siempre rápido — combinar globos y ataques",
+    ],
+    erroresComunes: [
+      "Víbora telegrafíada — el rival ya sabe qué viene",
+      "Contrapared que da demasiado ángulo y el rival intercede",
+      "No rotar cuando la pareja está en el fondo",
+      "Demasiados remates, poca bandeja — el rival espera y contraataca",
+    ],
+    palaRecomendada: {
+      forma: "Lágrima o híbrida",
+      nivel: "Intermedio-avanzado — carbono en cara, EVA media-alta densidad",
+      ejemplos: ["Bullpadel Vertex 03", "Nox AT10 Genius 12K", "Head Extreme Pro", "Adidas Metalbone 3.3"],
+    },
+    siguiente: 3,
+    anterior: 5,
+  },
+  3: {
+    n: 3, nombre: "Intermedio alto", color: "#D97706", pct: "~15%",
+    tiempoPromedio: "3–6 años", frecuencia: "3 veces por semana",
+    descripcion: "Cat 3 separa el jugador amateur del amateur avanzado. Tenés víbora, lees el juego y creás situaciones de ataque en lugar de solo reaccionar. La diferencia con Cat 2 está en la presión sostenida y los golpes definitivos como el x3.",
+    golpesDomina: [
+      { nombre: "Víbora", slug: "vibora", desc: "Víbora con dirección y efecto real." },
+      { nombre: "Dejada", slug: "dejada", desc: "Dejada en situaciones de apertura." },
+      { nombre: "Chiquita", slug: "chiquita", desc: "Chiquita para crear apertura al rival." },
+      { nombre: "Bandeja con dirección", slug: "bandeja", desc: "Bandeja seleccionando dirección según posición rival." },
+      { nombre: "X3 básico", slug: "x3", desc: "X3 en situaciones favorables." },
+    ],
+    golpesParaSubir: [
+      { nombre: "X3 consistente", slug: "x3", desc: "El x3 tiene que funcionar en un 60%+ para ser una amenaza real en el partido.", prioridad: "alta" },
+      { nombre: "Remate definitivo", slug: "remate", desc: "Remate que termina el punto, no solo que mantiene presión.", prioridad: "alta" },
+      { nombre: "X4", slug: "x4", desc: "El x4 es el golpe diferenciador de Cat 2. Muy pocos en Cat 3 lo dominan.", prioridad: "media" },
+    ],
+    tacticasClave: [
+      "Ataque sistemático: globo del rival = bandeja/víbora + cerrar red + siguiente golpe ganador",
+      "Rotura de pareja: atacar siempre al mismo jugador para crear descoordinación",
+      "El juego por el cuerpo: la zona entre los dos rivales donde ninguno se siente dueño",
+    ],
+    erroresComunes: [
+      "Víbora sin engaño previo — el rival ya se preparó",
+      "X3 cuando el rival está bien posicionado — situación no favorable",
+      "Bajar el ritmo cuando se tiene ventaja",
+      "No comunicarse en la devolución del saque",
+    ],
+    palaRecomendada: {
+      forma: "Diamante o lágrima potente",
+      nivel: "Avanzado — carbono 12K, EVA alta densidad",
+      ejemplos: ["Bullpadel Vertex 04", "Nox AT10 Genius 18K", "Head Coello Pro", "Adidas Metalbone HRD"],
+    },
+    siguiente: 2,
+    anterior: 4,
+  },
+  2: {
+    n: 2, nombre: "Avanzado", color: "#EA580C", pct: "~10%",
+    tiempoPromedio: "6–10 años", frecuencia: "3–4 veces por semana",
+    descripcion: "Cat 2 es el nivel del jugador que juega torneos regularmente con un juego completo. La diferencia con Cat 1 no está en los golpes — todos ya están — sino en la ejecución bajo presión máxima y en la capacidad de leer y ajustar la táctica durante el partido.",
+    golpesDomina: [
+      { nombre: "Repertorio ofensivo completo", slug: "x3", desc: "X3, x4, víbora, dejada, chiquita — todos con consistencia." },
+      { nombre: "Remate definitivo", slug: "remate", desc: "Remate que termina el punto en posición favorable." },
+      { nombre: "X4", slug: "x4", desc: "X4 en situaciones específicas." },
+      { nombre: "Defensa de elite", slug: "salida-de-pared", desc: "Salida de pared trasera con contraataque." },
+    ],
+    golpesParaSubir: [
+      { nombre: "X3 y X4 bajo presión", slug: "x3", desc: "No en situación ideal, sino cuando el rival te presiona y el tiempo es mínimo.", prioridad: "alta" },
+      { nombre: "Remate a 2 paredes", slug: "remate", desc: "El punto sin red donde la pelota bota en dos paredes — el punto definitivo de Cat 1.", prioridad: "media" },
+    ],
+    tacticasClave: [
+      "Lectura del rival: identificar sus patrones y anticipar antes de que ejecute",
+      "Ajuste táctico durante el partido: si algo no funciona, cambiarlo",
+      "Control mental: no bajar el nivel cuando el rival baja el suyo",
+    ],
+    erroresComunes: [
+      "Jugar siempre al mismo lado — el rival lo anticipa rápido",
+      "Demasiado riesgo en puntos de ventaja",
+      "Perder la concentración en los games de saque del rival",
+    ],
+    palaRecomendada: {
+      forma: "Diamante, alta densidad",
+      nivel: "Elite — carbono 12K/18K, perfil máximamente ofensivo",
+      ejemplos: ["Bullpadel Vertex 05", "Nox AT10 18K Tapia", "Head Delta Pro", "Adidas Metalbone HRD+"],
+    },
+    siguiente: 1,
+    anterior: 3,
+  },
+  1: {
+    n: 1, nombre: "Competitivo", color: "#DC2626", pct: "~5%",
+    tiempoPromedio: "10+ años", frecuencia: "4–5 veces por semana",
+    descripcion: "Cat 1 es la elite del pádel amateur y el umbral del semi-profesional. En este nivel la diferencia no es técnica — todos tienen los golpes — es mental, física y táctica. Torneos FPCH abiertos, algunos con sponsor o entrenador.",
+    golpesDomina: [
+      { nombre: "Repertorio completo bajo presión", slug: "x4", desc: "Todos los golpes ejecutados con consistencia en situaciones de máxima presión." },
+      { nombre: "Anticipación en tiempo real", slug: "bandeja", desc: "Lectura y anticipación de los movimientos rivales antes de que los ejecuten." },
+    ],
+    golpesParaSubir: [
+      { nombre: "Consistencia en partido tras partido", slug: "remate", desc: "La diferencia con el pádel profesional es mantener el nivel máximo durante horas y torneos completos.", prioridad: "alta" },
+    ],
+    tacticasClave: [
+      "Game plan específico para cada pareja rival — no hay plan genérico",
+      "Gestión del partido: los primeros 4 juegos marcan la tendencia del set",
+      "Comunicación táctica en tiempo real con la pareja",
+    ],
+    erroresComunes: [
+      "Sobrepensar en puntos clave — la automatización debe tomar el control",
+      "No adaptar la táctica cuando el plan A no funciona",
+      "Perder energía mental en decisiones arbitrales",
+    ],
+    palaRecomendada: {
+      forma: "Diamante o lágrima de alto rendimiento",
+      nivel: "Profesional — lo mejor del mercado sin restricciones",
+      ejemplos: ["Bullpadel Vertex 05 Catabre", "Nox AT10 18K", "Head Coello Pro", "StarVie Triton Pro"],
+    },
+    anterior: 2,
   },
 };
 
-type Props = { params: Promise<{ n: string }> };
+export function generateStaticParams() {
+  return [1, 2, 3, 4, 5, 6].map(n => ({ n: String(n) }));
+}
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { n } = await params;
-  const cat = catData[parseInt(n) as keyof typeof catData];
+export function generateMetadata({ params }: { params: { n: string } }): Metadata {
+  const cat = cats[Number(params.n)];
   if (!cat) return {};
   return {
-    title: `Categoría ${n} — ${cat.nombre} | tupadel`,
-    description: `Qué domina un jugador de Categoría ${n} y qué necesita para subir a Cat ${parseInt(n) - 1}. Drills, palas recomendadas y torneos en tupadel.`,
+    title: `Categoría ${cat.n} — ${cat.nombre} en Pádel | Pulso Pádel`,
+    description: `Todo sobre Cat ${cat.n} (${cat.nombre}): golpes que dominás, qué trabajar para subir y pala recomendada. ${cat.pct} de los jugadores en Chile.`,
   };
 }
 
-export function generateStaticParams() {
-  return [1, 2, 3, 4, 5, 6].map((n) => ({ n: String(n) }));
-}
+export default function CategoriaPage({ params }: { params: { n: string } }) {
+  const cat = cats[Number(params.n)];
+  if (!cat) notFound();
 
-export default async function CategoriaPage({ params }: Props) {
-  const { n } = await params;
-  const num = parseInt(n);
-  const cat = catData[num as keyof typeof catData];
-  if (!cat || num < 1 || num > 6) notFound();
-
-  const siguiente = num > 1 ? catData[(num - 1) as keyof typeof catData] : null;
+  const prioridadAlta = cat.golpesParaSubir.filter(g => g.prioridad === "alta");
+  const prioridadMedia = cat.golpesParaSubir.filter(g => g.prioridad === "media");
 
   return (
     <>
-      <Navbar activeSection="/golpes" />
+      <Navbar activeSection="/aprender" />
       <main>
         {/* Hero */}
-        <section className="px-6 md:px-8 py-10 md:py-12 border-b border-line bg-gradient-to-b from-canvas-warm to-canvas">
-          <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
-            <div className="md:col-span-8">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                <span className="mono text-xs uppercase tracking-widest text-ink-soft">CATEGORÍA · {n} DE 6</span>
+        <section
+          className="px-6 md:px-8 py-10 md:py-14 border-b border-line"
+          style={{ background: `linear-gradient(135deg, ${cat.color}12 0%, transparent 60%)` }}
+        >
+          <div className="max-w-[1000px] mx-auto">
+            <Link href="/categorias" className="mono text-xs text-ink-soft hover:text-ink mb-6 inline-block">← Todas las categorías</Link>
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0" style={{ backgroundColor: cat.color }}>
+                {cat.n}
               </div>
-              <h1 className="display text-6xl md:text-7xl font-semibold" style={{ letterSpacing: "-0.03em", lineHeight: "0.9" }}>
-                {cat.nombre}
-              </h1>
-              <div className="flex items-center gap-6 mt-7 mono text-sm flex-wrap">
-                <div><span className="text-ink-soft uppercase text-xs">Jugadores</span> <span className="font-bold ml-1">{cat.pct}</span></div>
-                <div><span className="text-ink-soft uppercase text-xs">Tiempo promedio</span> <span className="font-bold ml-1">{cat.tiempo}</span></div>
-                <div><span className="text-ink-soft uppercase text-xs">Frecuencia recomendada</span> <span className="font-bold ml-1">{cat.frecuencia}</span></div>
+              <div>
+                <div className="mono text-xs text-ink-soft uppercase mb-1">{cat.pct} de jugadores en Chile</div>
+                <h1 className="display text-4xl md:text-5xl font-semibold" style={{ letterSpacing: "-0.03em" }}>
+                  Cat {cat.n} — {cat.nombre}
+                </h1>
               </div>
             </div>
-            {siguiente && (
-              <div className="md:col-span-4">
-                <div className="border-2 rounded-2xl p-5" style={{ borderColor: cat.color }}>
-                  <div className="mono text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: cat.color }}>→ Próximo nivel</div>
-                  <div className="display text-xl font-semibold mb-2">Categoría {num - 1} · {siguiente.nombre}</div>
-                  <Link href={`/categorias/${num - 1}`} className="text-sm font-semibold" style={{ color: cat.color }}>
-                    Ver Cat {num - 1} →
-                  </Link>
-                </div>
+            <p className="text-xl text-ink-muted leading-relaxed max-w-2xl">{cat.descripcion}</p>
+            <div className="flex flex-wrap gap-3 mt-6">
+              <div className="border border-line rounded-lg px-4 py-2 bg-canvas text-sm">
+                <span className="text-ink-soft">Tiempo promedio: </span>
+                <span className="font-medium">{cat.tiempoPromedio}</span>
               </div>
-            )}
+              <div className="border border-line rounded-lg px-4 py-2 bg-canvas text-sm">
+                <span className="text-ink-soft">Frecuencia recomendada: </span>
+                <span className="font-medium">{cat.frecuencia}</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Domina / Falta */}
-        <section className="px-6 md:px-8 py-12 md:py-14 max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div>
-            <div className="mono text-xs uppercase tracking-widest text-[#A8E63A] font-semibold mb-3">✓ LO QUE YA DOMINÁS</div>
-            <h2 className="display text-2xl md:text-3xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>
-              Si estás en Cat {n}, esto debería estar consolidado.
+        <div className="max-w-[1000px] mx-auto px-6 md:px-8 py-12 space-y-14">
+
+          {/* Golpes que ya dominás */}
+          <section>
+            <h2 className="display text-2xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>
+              Golpes que dominás en Cat {cat.n}
             </h2>
-            <div className="space-y-3">
-              {cat.domina.map((g) => (
-                <div key={g.golpe} className="border border-line rounded-lg p-4 bg-[#ECFCCB]/20">
-                  <div className="flex items-start gap-3">
-                    <span className="text-[#7DB81E] font-bold mt-0.5">✓</span>
-                    <div>
-                      <div className="font-semibold text-sm">{g.golpe}</div>
-                      <div className="text-xs text-ink-muted mt-0.5">{g.desc}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="mono text-xs uppercase tracking-widest text-[#E8590C] font-semibold mb-3">→ LO QUE TE FALTA PARA SUBIR</div>
-            <h2 className="display text-2xl md:text-3xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>
-              Estos movimientos te llevan a Cat {num - 1}.
-            </h2>
-            <div className="space-y-3">
-              {cat.faltan.map((g) => (
-                <div key={g.golpe} className="border border-line rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <span className="text-[#E8590C] font-bold mt-0.5">→</span>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <div className="font-semibold text-sm">{g.golpe}</div>
-                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold ${
-                          g.prio === 1 ? "bg-[#FFE4D1] text-[#E8590C]" : g.prio === 2 ? "bg-[#FFE4D1] text-[#E8590C] opacity-70" : "bg-canvas-dim text-ink-muted"
-                        }`}>
-                          P{g.prio}
-                        </span>
-                      </div>
-                      <div className="text-xs text-ink-muted mt-0.5">{g.desc}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="border-t border-line bg-canvas-warm px-6 md:px-8 py-12">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="mono text-xs uppercase tracking-widest text-ink-soft mb-4">→ ¿No sabés en qué categoría estás?</div>
-            <h2 className="display text-3xl md:text-4xl font-semibold mb-4" style={{ letterSpacing: "-0.02em" }}>Hacé el diagnóstico en 3 minutos</h2>
-            <p className="text-ink-muted mb-6">14 preguntas que analizan tu ejecución técnica, lectura de juego y experiencia. Resultado inmediato.</p>
-            <Link href="/diagnostico" className="inline-block bg-[#A8E63A] text-[#0D1B2A] px-7 py-4 rounded-lg font-semibold hover:bg-[#7DB81E] transition-colors">
-              Hacer diagnóstico gratis →
-            </Link>
-          </div>
-        </section>
-
-        {/* Nav entre categorías */}
-        <section className="border-t border-line px-6 md:px-8 py-8">
-          <div className="max-w-[1400px] mx-auto">
-            <div className="mono text-xs uppercase tracking-wider text-ink-soft mb-4">Otras categorías</div>
-            <div className="flex flex-wrap gap-2">
-              {[1, 2, 3, 4, 5, 6].map((c) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {cat.golpesDomina.map((g) => (
                 <Link
-                  key={c}
-                  href={`/categorias/${c}`}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
-                    c === num ? "border-ink bg-ink text-white" : "border-line hover:border-ink"
-                  }`}
+                  key={g.slug}
+                  href={`/golpes/${g.slug}`}
+                  className="flex items-start gap-3 border border-line rounded-xl p-4 bg-canvas hover:border-ink-muted transition-colors"
                 >
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: catData[c as keyof typeof catData].color }} />
-                  Cat {c} · {catData[c as keyof typeof catData].nombre}
+                  <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: cat.color }} />
+                  <div>
+                    <div className="font-semibold mb-0.5">{g.nombre}</div>
+                    <div className="text-sm text-ink-muted">{g.desc}</div>
+                  </div>
                 </Link>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Para subir */}
+          {cat.siguiente && (
+            <section>
+              <h2 className="display text-2xl font-semibold mb-2" style={{ letterSpacing: "-0.02em" }}>
+                Para subir a Cat {cat.n - 1}
+              </h2>
+              <p className="text-ink-muted mb-7">Los golpes y habilidades que te separan del siguiente nivel.</p>
+
+              {prioridadAlta.length > 0 && (
+                <div className="mb-6">
+                  <div className="mono text-xs text-ink-soft uppercase tracking-wider mb-4">Prioridad alta</div>
+                  <div className="space-y-3">
+                    {prioridadAlta.map((g) => (
+                      <Link
+                        key={g.slug}
+                        href={`/golpes/${g.slug}`}
+                        className="flex items-start gap-4 border-l-2 border-[#DC2626] pl-5 py-2 group hover:pl-6 transition-all"
+                      >
+                        <div>
+                          <div className="font-semibold mb-1">{g.nombre} <span className="text-ink-soft font-normal text-sm">→</span></div>
+                          <div className="text-sm text-ink-muted">{g.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {prioridadMedia.length > 0 && (
+                <div>
+                  <div className="mono text-xs text-ink-soft uppercase tracking-wider mb-4">Prioridad media</div>
+                  <div className="space-y-3">
+                    {prioridadMedia.map((g) => (
+                      <Link
+                        key={g.slug}
+                        href={`/golpes/${g.slug}`}
+                        className="flex items-start gap-4 border-l-2 border-line pl-5 py-2 group hover:pl-6 transition-all"
+                      >
+                        <div>
+                          <div className="font-semibold mb-1">{g.nombre} <span className="text-ink-soft font-normal text-sm">→</span></div>
+                          <div className="text-sm text-ink-muted">{g.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Tácticas clave */}
+          <section>
+            <h2 className="display text-2xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>Tácticas clave en este nivel</h2>
+            <ul className="space-y-4">
+              {cat.tacticasClave.map((t, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <span className="mono text-xs text-ink-soft mt-1 flex-shrink-0">0{i + 1}</span>
+                  <span className="text-ink-muted leading-relaxed">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Errores comunes */}
+          <section>
+            <h2 className="display text-2xl font-semibold mb-6" style={{ letterSpacing: "-0.02em" }}>Errores más comunes en Cat {cat.n}</h2>
+            <div className="space-y-0">
+              {cat.erroresComunes.map((e, i) => (
+                <div key={i} className="flex items-start gap-3 py-3 border-b border-line last:border-0">
+                  <span className="text-[#DC2626] font-bold flex-shrink-0 mt-0.5">✗</span>
+                  <span className="text-ink-muted">{e}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Pala recomendada */}
+          <section className="border border-line rounded-xl p-6 bg-canvas-warm">
+            <h2 className="display text-xl font-semibold mb-4" style={{ letterSpacing: "-0.02em" }}>Pala recomendada para Cat {cat.n}</h2>
+            <div className="flex flex-wrap gap-4 mb-4 text-sm">
+              <div><span className="text-ink-soft">Forma: </span><span className="font-medium">{cat.palaRecomendada.forma}</span></div>
+              <div><span className="text-ink-soft">Perfil: </span><span className="font-medium">{cat.palaRecomendada.nivel}</span></div>
+            </div>
+            <div className="flex flex-wrap gap-2 mb-5">
+              {cat.palaRecomendada.ejemplos.map((e) => (
+                <span key={e} className="border border-line px-3 py-1 rounded-full text-sm bg-canvas">{e}</span>
+              ))}
+            </div>
+            <Link
+              href={`/palas?nivel=${cat.n <= 2 ? "1-2" : cat.n <= 4 ? "3-4" : "5-6"}`}
+              className="inline-flex items-center gap-2 bg-ink text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-ink/90 transition-colors"
+            >
+              Ver palas para Cat {cat.n} →
+            </Link>
+          </section>
+
+          {/* Navegación */}
+          <section className="flex items-center justify-between pt-4 border-t border-line">
+            {cat.anterior ? (
+              <Link href={`/categorias/${cat.anterior}`} className="text-sm text-ink-muted hover:text-ink transition-colors">
+                ← Cat {cat.anterior} — {cats[cat.anterior].nombre}
+              </Link>
+            ) : <div />}
+            <Link href="/categorias" className="mono text-xs text-ink-soft hover:text-ink transition-colors">
+              Todas las categorías
+            </Link>
+            {cat.siguiente ? (
+              <Link href={`/categorias/${cat.siguiente}`} className="text-sm text-ink-muted hover:text-ink transition-colors">
+                Cat {cat.siguiente} — {cats[cat.siguiente].nombre} →
+              </Link>
+            ) : <div />}
+          </section>
+        </div>
       </main>
       <Footer />
     </>

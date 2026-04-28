@@ -28,7 +28,7 @@ const catColors: Record<number, string> = {
 export default function GolpesPage() {
   return (
     <>
-      <Navbar activeSection="/golpes" />
+      <Navbar activeSection="/aprender" />
       <main>
         <section className="px-6 md:px-8 py-10 md:py-14 border-b border-line bg-canvas-warm">
           <div className="max-w-[1400px] mx-auto">
