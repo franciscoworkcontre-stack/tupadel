@@ -29,10 +29,13 @@ const especialidadLabels: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  const allProfes = await db.query.profes.findMany({ where: eq(profes.estado, "activo") });
-  const profeParams = allProfes.map((p) => ({ slug: p.slug }));
   const ciudadParams = Object.keys(ciudadConfig).map((c) => ({ slug: c }));
-  return [...profeParams, ...ciudadParams];
+  try {
+    const allProfes = await db.query.profes.findMany({ where: eq(profes.estado, "activo") });
+    return [...allProfes.map((p) => ({ slug: p.slug })), ...ciudadParams];
+  } catch {
+    return ciudadParams;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
