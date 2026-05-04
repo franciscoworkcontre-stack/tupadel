@@ -10,6 +10,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const nav = [
     { href: "/admin", label: "Dashboard", icon: "◈" },
+    { href: "/admin/usuarios", label: "Usuarios y roles", icon: "👥" },
+    { href: "/admin/profes", label: "Profes", icon: "🎾" },
     { href: "/admin/operadores", label: "Operadores", icon: "🏢" },
     { href: "/admin/retiros", label: "Retiros", icon: "🏝️" },
   ];

@@ -1018,3 +1018,19 @@ export const profeAlumnoRelacionRelations = relations(profeAlumnoRelacion, ({ on
   profe: one(profes, { fields: [profeAlumnoRelacion.profeId], references: [profes.id] }),
   user: one(users, { fields: [profeAlumnoRelacion.userId], references: [users.id] }),
 }));
+
+// ============================================================
+// ADMIN LOGS — audit trail de cambios sensibles
+// ============================================================
+
+export const adminLogs = pgTable("admin_logs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  adminId: uuid("admin_id").notNull().references(() => users.id),
+  targetUserId: uuid("target_user_id").notNull().references(() => users.id),
+  accion: varchar("accion", { length: 100 }).notNull(), // "cambio_rol"
+  valorAnterior: varchar("valor_anterior", { length: 100 }),
+  valorNuevo: varchar("valor_nuevo", { length: 100 }),
+  createdAt: timestamp("created_at").defaultNow(),
+},
+(t) => [index("admin_logs_admin_idx").on(t.adminId), index("admin_logs_target_idx").on(t.targetUserId)]
+);
