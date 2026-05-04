@@ -19,7 +19,8 @@ export async function POST(req: NextRequest) {
   }
 
   const passwordHash = await hashPassword(password);
-  const userRol = rol === "operador" ? "operador" : "jugador";
+  const ALLOWED_ROLES = ["jugador", "operador", "profe"];
+  const userRol = ALLOWED_ROLES.includes(rol) ? rol : "jugador";
 
   const [user] = await db.insert(users).values({
     id: crypto.randomUUID(),

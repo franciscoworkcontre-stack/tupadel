@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 
 const PROTECTED: Record<string, string> = {
+  "/profe": "profe",
   "/operador": "operador",
   "/club": "admin_cancha",
   "/admin": "admin",
@@ -38,5 +39,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/operador/:path*", "/club/:path*", "/admin/:path*"],
+  matcher: ["/profe/:path*", "/operador/:path*", "/club/:path*", "/admin/:path*"],
 };

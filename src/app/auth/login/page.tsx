@@ -25,7 +25,8 @@ export default function LoginPage() {
       if (!res.ok) { setError(data.error ?? "Error al iniciar sesión."); return; }
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get("redirect");
-      if (data.rol === "operador") window.location.href = redirect ?? "/operador";
+      if (data.rol === "profe") window.location.href = redirect ?? "/profe";
+      else if (data.rol === "operador") window.location.href = redirect ?? "/operador";
       else if (data.rol === "admin_cancha") window.location.href = redirect ?? "/club";
       else if (data.rol === "admin") window.location.href = redirect ?? "/admin";
       else window.location.href = redirect ?? "/mi-padel";
