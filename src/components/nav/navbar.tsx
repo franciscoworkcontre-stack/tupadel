@@ -11,6 +11,7 @@ const links = [
   { href: "/canchas", label: "Canchas" },
   { href: "/profes", label: "Profes" },
   { href: "/aprender", label: "Aprender" },
+  { href: "/ranking", label: "Ranking" },
   { href: "/torneos", label: "Torneos" },
   { href: "/comunidad/buscar-companero", label: "Comunidad" },
 ];

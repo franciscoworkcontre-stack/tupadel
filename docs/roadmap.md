@@ -1,7 +1,8 @@
 # Roadmap tupadel
 
 ## En progreso
-- [ ] Admin gestión de roles (`/admin/usuarios`) — spec aprobado 2026-05-03
+- [x] Admin gestión de roles (`/admin/usuarios`) — shipeado 2026-05-03
+- [ ] Sistema de partidos y ranking — spec aprobado 2026-05-03
 
 ## Done
 - [x] Módulo Palas — directorio, fichas, comparador, recomendador

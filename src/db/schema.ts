@@ -199,7 +199,11 @@ export const users = pgTable("users", {
   ladoPreferido: varchar("lado_preferido", { length: 10 }), // drive | reves
   palaActualId: uuid("pala_actual_id").references(() => palas.id),
   categoriaEstimada: integer("categoria_estimada"), // 1-6
-  rol: varchar("rol", { length: 30 }).notNull().default("jugador"), // jugador | operador | admin_cancha | admin
+  puntosRanking: integer("puntos_ranking").notNull().default(0),
+  partidosJugados: integer("partidos_jugados").notNull().default(0),
+  partidosGanados: integer("partidos_ganados").notNull().default(0),
+  rachaActual: integer("racha_actual").notNull().default(0), // victorias consecutivas
+  rol: varchar("rol", { length: 30 }).notNull().default("jugador"),
   avatarUrl: text("avatar_url"),
   telefono: varchar("telefono", { length: 30 }),
   passwordHash: text("password_hash"),
@@ -1027,10 +1031,91 @@ export const adminLogs = pgTable("admin_logs", {
   id: uuid("id").primaryKey().defaultRandom(),
   adminId: uuid("admin_id").notNull().references(() => users.id),
   targetUserId: uuid("target_user_id").notNull().references(() => users.id),
-  accion: varchar("accion", { length: 100 }).notNull(), // "cambio_rol"
+  accion: varchar("accion", { length: 100 }).notNull(),
   valorAnterior: varchar("valor_anterior", { length: 100 }),
   valorNuevo: varchar("valor_nuevo", { length: 100 }),
   createdAt: timestamp("created_at").defaultNow(),
 },
 (t) => [index("admin_logs_admin_idx").on(t.adminId), index("admin_logs_target_idx").on(t.targetUserId)]
 );
+
+// ============================================================
+// PARTIDOS Y RANKING
+// ============================================================
+
+export const matchTipoEnum = pgEnum("match_tipo", ["no_oficial", "torneo_amateur"]);
+export const matchEstadoEnum = pgEnum("match_estado", ["pendiente", "confirmado", "en_disputa", "anulado"]);
+export const matchEquipoEnum = pgEnum("match_equipo", ["A", "B"]);
+
+export const matches = pgTable(
+  "matches",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tipo: matchTipoEnum("tipo").notNull().default("no_oficial"),
+    estado: matchEstadoEnum("estado").notNull().default("pendiente"),
+    setsEquipoA: integer("sets_equipo_a").notNull().default(0),
+    setsEquipoB: integer("sets_equipo_b").notNull().default(0),
+    detalleSets: varchar("detalle_sets", { length: 100 }), // ej. "6-4,3-6,6-3"
+    fechaJugado: timestamp("fecha_jugado").notNull(),
+    cancha: varchar("cancha", { length: 200 }),
+    torneoNombre: varchar("torneo_nombre", { length: 200 }),
+    creadoPorId: uuid("creado_por_id").notNull().references(() => users.id),
+    anulacionMotivo: text("anulacion_motivo"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    index("matches_estado_idx").on(t.estado),
+    index("matches_fecha_idx").on(t.fechaJugado),
+    index("matches_creado_idx").on(t.creadoPorId),
+  ]
+);
+
+export const matchJugadores = pgTable(
+  "match_jugadores",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    matchId: uuid("match_id").notNull().references(() => matches.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").notNull().references(() => users.id),
+    equipo: matchEquipoEnum("equipo").notNull(),
+    gano: boolean("gano"),
+    puntosGanados: integer("puntos_ganados").notNull().default(0),
+    categoriaAlMomentoDeJugar: integer("categoria_al_momento").notNull().default(6),
+  },
+  (t) => [
+    uniqueIndex("match_jugador_unique_idx").on(t.matchId, t.userId),
+    index("match_jugadores_match_idx").on(t.matchId),
+    index("match_jugadores_user_idx").on(t.userId),
+  ]
+);
+
+export const matchConfirmaciones = pgTable(
+  "match_confirmaciones",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    matchId: uuid("match_id").notNull().references(() => matches.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").notNull().references(() => users.id),
+    confirma: boolean("confirma").notNull(),
+    motivoDisputa: text("motivo_disputa"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("match_conf_unique_idx").on(t.matchId, t.userId),
+    index("match_conf_match_idx").on(t.matchId),
+  ]
+);
+
+export const matchesRelations = relations(matches, ({ one, many }) => ({
+  creadoPor: one(users, { fields: [matches.creadoPorId], references: [users.id] }),
+  jugadores: many(matchJugadores),
+  confirmaciones: many(matchConfirmaciones),
+}));
+
+export const matchJugadoresRelations = relations(matchJugadores, ({ one }) => ({
+  match: one(matches, { fields: [matchJugadores.matchId], references: [matches.id] }),
+  user: one(users, { fields: [matchJugadores.userId], references: [users.id] }),
+}));
+
+export const matchConfirmacionesRelations = relations(matchConfirmaciones, ({ one }) => ({
+  match: one(matches, { fields: [matchConfirmaciones.matchId], references: [matches.id] }),
+  user: one(users, { fields: [matchConfirmaciones.userId], references: [users.id] }),
+}));
